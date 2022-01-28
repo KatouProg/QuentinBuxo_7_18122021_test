@@ -63,10 +63,10 @@ module.exports = {
     });
   },
   listMessages: function(req, res) {
-    var fields  = req.query.fields;
-    var limit   = parseInt(req.query.limit);
-    var offset  = parseInt(req.query.offset);
-    var order   = req.query.order;
+    var fields  = req.query.fields;             // Permet de recup les colonnes que l'on souhaite afficher
+    var limit   = parseInt(req.query.limit);    // Permet de recup les messages par segmentation
+    var offset  = parseInt(req.query.offset);   // "    "    "    "   "
+    var order   = req.query.order;              // Permet de recup la liste des messages dans un ordre particulier
 
     if (limit > ITEMS_LIMIT) {
       limit = ITEMS_LIMIT;
