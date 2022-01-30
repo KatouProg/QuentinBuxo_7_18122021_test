@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/views/Login.vue";
-import Profile from "@/views/Profile.vue";
+import PostsList from "@/components/PostsList.vue";
 
 const routes = [
   { 
@@ -9,9 +9,9 @@ const routes = [
     component: Login,
   },
   { 
-    name: 'profile',
-    path: '/profile', 
-    component: Profile, 
+    name: 'postslist',
+    path: '/posts', 
+    component: PostsList, 
     props:true 
   },
 ]

@@ -50,7 +50,7 @@ export default {
   },
   mounted: function () {
     if (this.$store.state.user.userId != -1) {
-      this.$router.push('/profile');
+      this.$router.push('/');
       return ;
     }
   },
@@ -85,14 +85,14 @@ export default {
         email: this.email,
         password: this.password,
       }).then(function () {
-        self.$router.push('/profile');
+        self.$router.push('/components/PostsList');
       }, function (error) {
         console.log(error);
       })
     },
-    createAccount: function () {
+    register: function () {
       const self = this;
-      this.$store.dispatch('createAccount', {
+      this.$store.dispatch('register', {
         email: this.email,
         username: this.nom,
         password: this.password,

@@ -3,10 +3,16 @@ var express = require('express');
 var usersCtrl = require('./routes/usersCtrl');
 var messagesCtrl = require('./routes/messagesCtrl');
 var likesCtrl    = require('./routes/likesCtrl');
+var cors = require('cors');
 
 //Router
 exports.router = (function() {
     var apiRouter = express.Router();
+
+    apiRouter.use(cors({
+        origin: '*'
+    }));
+
 
     //Users routes
     apiRouter.route('/users/register/').post(usersCtrl.register);
