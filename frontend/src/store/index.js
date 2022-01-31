@@ -3,7 +3,7 @@ import { createStore } from 'vuex'
 const axios = require('axios');
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/api/users'
+  baseURL: 'http://localhost:8080/api'
 });
 
 let user = localStorage.getItem('user');
@@ -33,7 +33,6 @@ const store = createStore({
       email: '',
       username:'',
       bio: '',
-      photo: '',
     },
   },
   mutations: {
@@ -60,7 +59,7 @@ const store = createStore({
     login: ({commit}, userInfos) => {
       commit('setStatus', 'loading');
       return new Promise((resolve, reject) => {
-        instance.post('/login', userInfos)
+        instance.post('/users/login', userInfos)
         .then(function (response) {
           commit('setStatus', '');
           commit('logUser', response.data);
@@ -76,7 +75,7 @@ const store = createStore({
       commit('setStatus', 'loading');
       return new Promise((resolve, reject) => {
         commit;
-        instance.post('/register', userInfos)
+        instance.post('/users/register', userInfos)
         .then(function (response) {
           commit('setStatus', 'created');
           resolve(response);
@@ -88,7 +87,7 @@ const store = createStore({
       });
     },
     getUserInfos: ({commit}) => {
-      instance.post('/infos')
+      instance.post('/users/me/')
       .then(function (response) {
         commit('userInfos', response.data.infos);
       })

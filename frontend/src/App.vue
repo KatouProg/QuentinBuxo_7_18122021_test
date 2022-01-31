@@ -6,11 +6,11 @@
           alt="Logo du groupe Groupomania"
           title="Groupomania"
         /></router-link> |
-    <router-link to="/">Home</router-link> |
-    <router-link to="/login">Se connecter</router-link> |
-    <router-link to="/register">S'enregistrer</router-link>
+    <router-link to="/posts">Home</router-link> |
+    <router-link to="/">Se connecter</router-link> |
+    <router-link to="/profil">Profil</router-link>
+    <router-view></router-view>
   </div>
-  <router-view/>
 </template>
 
 <script>
