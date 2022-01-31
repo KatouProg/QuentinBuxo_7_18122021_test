@@ -6,7 +6,7 @@
           alt="Logo du groupe Groupomania"
           title="Groupomania"
         /></router-link> |
-    <router-link to="/posts">Home</router-link> |
+    <router-link to="/home">Home</router-link> |
     <router-link to="/">Se connecter</router-link> |
     <router-link to="/profil">Profil</router-link>
     <router-view></router-view>
@@ -45,7 +45,8 @@ export default {
   padding: 30px;
   background-color: white;
   max-width: 100%;
-  width: 540px;
+  height:100%;
+  width: 800px;
   background:white;
   border-radius:16px;
   padding:32px;

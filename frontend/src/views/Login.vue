@@ -130,7 +130,7 @@ export default {
         })
         .then(
           function () {
-            self.$router.push("/posts");
+            self.$router.push("/home");
           },
           function (error) {
             console.log(error);

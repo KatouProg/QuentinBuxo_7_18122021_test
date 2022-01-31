@@ -1,0 +1,148 @@
+<template>
+  <header>
+    <nav>
+      <ul>
+        <router-link to="/team" class="link header-link">
+          <li class="header-link">
+            <i class="fas fa-users"></i><span class="legende">Team</span>
+          </li>
+        </router-link>
+
+        <router-link to="/userinfos" class="link">
+          <li v-if="user.imageProfile">
+            <img
+              :src="user.imageProfile"
+              alt="profile picture"
+              class="profil-picture"
+            />
+          </li>
+          <li v-else>
+            <img
+              src="../assets/img/anonymous.png"
+              alt="anonymous profile picture"
+              class="profil-picture"
+            />
+          </li>
+        </router-link>
+
+        <router-link to="/" class="link header-link">
+          <li class="header-link" @click="clearStorage">
+            <i class="fas fa-power-off" @click="clearStorage"></i
+            ><span class="legende">Logout</span>
+          </li>
+        </router-link>
+      </ul>
+    </nav>
+  </header>
+</template>
+<script>
+import { mapState } from "vuex";
+
+export default {
+  name: "TheHeader",
+  computed: {
+    ...mapState(["user"]),
+  },
+  props: {
+    imageSrc: String,
+  },
+  methods: {
+    clearStorage(e) {
+      e.preventDefault();
+
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/");
+      });
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+
+header {
+  background-color: #fad8d3;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 25px;
+  font-size: 2rem;
+  height: 8rem;
+  border-radius: 8px;
+
+  nav {
+    
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .link {
+    text-decoration: none;
+    color: white;
+  }
+  .header-link {
+    display: flex;
+    flex-direction: column;
+  }
+
+  img {
+    width: 300px;
+    margin-left: 2rem;
+    margin-top: -4.5rem;
+  }
+  ul {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    li {
+      padding: 0.5rem;
+      transition: transform 0.3s;
+
+      .legende {
+        font-size: 50%;
+        display: none;
+        margin-top: 0rem;
+      }
+      &:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s;
+        .legende {
+          display: flex;
+        }
+      }
+      .profil-picture {
+        width: 5.5rem;
+        height: 5.5rem;
+        object-fit: cover;
+        margin-top: 0;
+        margin-left: 0;
+        border-radius: 50px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  header {
+    flex-direction: column;
+    padding: 0;
+    height: 10rem;
+    img {
+      padding: 0;
+      margin-top: -7rem;
+      @media screen and (max-width: 350px) {
+        width: 6rem;
+        margin-top: -2rem;
+      }
+    }
+    ul {
+      justify-content: center;
+      margin-top: -9rem;
+    }
+  }
+}
+</style>
