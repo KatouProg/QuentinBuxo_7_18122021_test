@@ -30,6 +30,8 @@ export default {
   margin:0;
   padding: 0;
   box-sizing: border-box;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 #app {

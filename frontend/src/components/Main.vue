@@ -1,4 +1,4 @@
-<!--MAIN section with the "wall" and all the posts from different users-->
+<!--MAIN section mur + posts des differents utilisateurs-->
 <template>
   <div class="main-page">
     <TheHeader userName="$user.username"></TheHeader>
@@ -65,31 +65,6 @@
                 </div>
                 <img v-if="post.image" :src="post.image" alt="" />
                 <p>{{ post.content }}</p>
-
-                <div class="icones">
-                  <div class="comment">
-                    <Comment :postId="post.id"></Comment>
-                    <span class="comment-number">{{ post.comments }}</span>
-                  </div>
-                  <Like-button :postId="post.id"></Like-button>
-                  <span class="like-number">{{ post.likes }}</span>
-                </div>
-                <div
-                  v-if="
-                    this.$store.state.user.userId === post.User.id ||
-                    this.$store.state.user.isAdmin
-                  "
-                  class="personal-icone"
-                >
-                  <router-link
-                    :to="{ name: 'Modification', params: { postId: post.id } }"
-                    class="link button-pencil"
-                  >
-                    Edit
-                    <i class="fas fa-pencil-alt"></i>
-                  </router-link>
-                  <Delete-button :postId="post.id"></Delete-button>
-                </div>
               </div>
             </li>
           </ul>
@@ -103,18 +78,12 @@
 import TheHeader from "../components/TheHeader.vue";
 import { mapState } from "vuex";
 import moment from "moment";
-import DeleteButton from "../components/DeleteButton.vue";
-import LikeButton from "../components/LikeButton.vue";
-import Comment from "../components/Comment.vue";
 
 // import Suggestion from '../components/Suggestion.vue'
 
 export default {
   components: {
-    TheHeader: TheHeader,
-    DeleteButton: DeleteButton,
-    LikeButton: LikeButton,
-    Comment: Comment,
+    TheHeader: TheHeader
     
     //   "Suggestion": Suggestion
   },
