@@ -7,7 +7,7 @@
         <form action="">
           <input
             type="text"
-            :placeholder="'What\'s up' + ' ' + user.username"
+            :placeholder="'  What\'s up' + ' ' + user.username"
             class="write-post"
             v-model="newPost"
             id="post"
@@ -15,7 +15,7 @@
           />
 
           <label class="custom-button">
-            <p>Add an Image</p>
+            <p>Ajouter une Image</p>
             <input
               type="file"
               id="post-picture"
@@ -31,7 +31,7 @@
             type="submit"
             @click="postPost"
             class="btn-submit"
-            value="Submit"
+            value="Envoyer"
           />
         </form>
       </div>
@@ -150,7 +150,7 @@ $color-secondary: #fad8d3;
   }
   .custom-button {
     p {
-      margin-top: -1rem;
+      margin-top: 1rem;
       margin-bottom: 15px;
     }
 
@@ -255,6 +255,14 @@ $color-secondary: #fad8d3;
     padding-top: 0.7rem;
     right: 50px;
     color: $color-primary;
+  }
+  .btn-submit {
+    background-color: $color-primary;
+    height: 2rem;
+    width: 40%;
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 50px;
   }
 }
 

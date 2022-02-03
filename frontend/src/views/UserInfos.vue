@@ -251,6 +251,23 @@ $color-tertiary: #fdf0ee;
       font-size: 1.3em;
     }
   }
+
+  .btn-submit {
+    background-color: white;
+    height: 1.6rem;
+    width: 50%;
+    border-radius: 20px;
+    color: $color-primary;
+  }
+  
+  .btn-submit2 {
+    background-color: white;
+    height: 1.6rem;
+    width: 50%;
+    border-radius: 20px;
+    color: $color-primary;
+  }
+
   .danger {
     background-color: $color-primary;
     height: 2rem;

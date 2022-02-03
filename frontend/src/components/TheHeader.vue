@@ -59,9 +59,12 @@ export default {
 </script>
 
 <style lang="scss">
+$color-primary: #fc2c04;
+$color-secondary: #fad8d3;
+
 
 header {
-  background-color: #fad8d3;
+  background-color: $color-secondary;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -70,6 +73,8 @@ header {
   height: 8rem;
   border-radius: 8px;
   padding-top: 12px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
   nav {
     
@@ -111,6 +116,7 @@ header {
       &:hover {
         transform: scale(1.3);
         transition: transform 0.3s;
+        color: $color-primary;
         
       }
       .profil-picture {

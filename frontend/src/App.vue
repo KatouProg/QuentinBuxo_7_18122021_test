@@ -8,7 +8,7 @@
         /></router-link> |
     <router-link to="/home">Home</router-link> |
     <router-link to="/">Se connecter</router-link> |
-    <router-link to="/profil">Profile</router-link>
+    <router-link to="/profil">Profil</router-link>
     <router-view></router-view>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
   background-color: white;
   max-width: 100%;
   height:100%;
-  width: 800px;
+  width: 900px;
   background:white;
   border-radius:16px;
   padding:32px;
