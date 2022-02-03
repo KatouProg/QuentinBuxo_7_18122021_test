@@ -93,7 +93,10 @@ const store = createStore({
       })
       .catch(function () {
       });
-    }
+    },
+    logout: async ({ commit }) => {
+      commit("logout");
+    },
   }
 })
 

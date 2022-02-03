@@ -69,6 +69,7 @@ header {
   font-size: 2rem;
   height: 8rem;
   border-radius: 8px;
+  padding-top: 12px;
 
   nav {
     
@@ -108,41 +109,21 @@ header {
         margin-top: 0rem;
       }
       &:hover {
-        transform: scale(1.1);
+        transform: scale(1.3);
         transition: transform 0.3s;
-        .legende {
-          display: flex;
-        }
+        
       }
       .profil-picture {
         width: 5.5rem;
         height: 5.5rem;
         object-fit: cover;
         margin-top: 0;
-        margin-left: 0;
+        margin-left: 25px;
+        margin-right: 25px;
         border-radius: 50px;
       }
     }
   }
 }
 
-@media screen and (max-width: 800px) {
-  header {
-    flex-direction: column;
-    padding: 0;
-    height: 10rem;
-    img {
-      padding: 0;
-      margin-top: -7rem;
-      @media screen and (max-width: 350px) {
-        width: 6rem;
-        margin-top: -2rem;
-      }
-    }
-    ul {
-      justify-content: center;
-      margin-top: -9rem;
-    }
-  }
-}
 </style>
