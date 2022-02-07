@@ -14,7 +14,7 @@ module.exports = {
     // Getting auth header
     var headerAuth  = req.headers['authorization'];
     var userId      = jwtUtils.getUserId(headerAuth);
-
+    console.log(jwtUtils.getUserId);
     // Params
     var title   = req.body.title;
     var content = req.body.content;
@@ -29,7 +29,7 @@ module.exports = {
 
     asyncLib.waterfall([
       function(done) {
-        models.User.findOne({
+        models.Users.findOne({
           where: { id: userId }
         })
         .then(function(userFound) {
@@ -41,15 +41,16 @@ module.exports = {
       },
       function(userFound, done) {
         if(userFound) {
-          models.Message.create({
+          models.Messages.create({
             title  : title,
             content: content,
             likes  : 0,
-            UserId : userFound.id
+            userId : userFound.id
           })
           .then(function(newMessage) {
             done(newMessage);
           });
+          console.log(userFound.id);
         } else {
           res.status(404).json({ 'error': 'user not found' });
         }
@@ -72,13 +73,13 @@ module.exports = {
       limit = ITEMS_LIMIT;
     }
 
-    models.Message.findAll({
+    models.Messages.findAll({
       order: [(order != null) ? order.split(':') : ['title', 'ASC']],
       attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
       limit: (!isNaN(limit)) ? limit : null,
       offset: (!isNaN(offset)) ? offset : null,
       include: [{
-        model: models.User,
+        model: models.Users,
         attributes: [ 'username' ]
       }]
     }).then(function(messages) {

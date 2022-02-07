@@ -158,6 +158,7 @@ export default {
 $color-primary: #fc2c04;
 $color-secondary: #fad8d3;
 $color-tertiary: #fdf0ee;
+
 .user-infos {
   width: 100%;
   h1 {

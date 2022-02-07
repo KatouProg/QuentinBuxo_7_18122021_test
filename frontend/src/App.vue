@@ -8,7 +8,7 @@
         /></router-link> |
     <router-link to="/home">Home</router-link> |
     <router-link to="/">Se connecter</router-link> |
-    <router-link to="/profil">Profil</router-link>
+    <router-link to="/userInfos">Profil</router-link>
     <router-view></router-view>
   </div>
 </template>

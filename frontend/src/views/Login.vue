@@ -26,7 +26,6 @@
         class="form-row__input"
         type="text"
         placeholder="Nom"
-        id="username"
       />
       <input
         v-model="bio"

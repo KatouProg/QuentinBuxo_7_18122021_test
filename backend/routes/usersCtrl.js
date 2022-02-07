@@ -36,7 +36,7 @@ module.exports = {
 
     asyncLib.waterfall([
       function(done) {
-        models.User.findOne({
+        models.Users.findOne({
           attributes: ['email'],
           where: { email: email }
         })
@@ -57,7 +57,7 @@ module.exports = {
         }
       },
       function(userFound, bcryptedPassword, done) {
-        var newUser = models.User.create({
+        var newUser = models.Users.create({
           email: email,
           username: username,
           password: bcryptedPassword,
@@ -68,6 +68,7 @@ module.exports = {
           done(newUser);
         })
         .catch(function(err) {
+          console.log(err);
           return res.status(500).json({ 'error': 'cannot add user' });
         });
       }
@@ -77,6 +78,7 @@ module.exports = {
           'userId': newUser.id
         });
       } else {
+        console.log(err);
         return res.status(500).json({ 'error': 'cannot add user' });
       }
     });
@@ -93,7 +95,7 @@ module.exports = {
 
     asyncLib.waterfall([
       function(done) {
-        models.User.findOne({
+        models.Users.findOne({
           where: { email: email }
         })
         .then(function(userFound) {
@@ -138,7 +140,7 @@ module.exports = {
     if (userId < 0)
       return res.status(400).json({ 'error': 'wrong token' });
 
-    models.User.findOne({
+    models.Users.findOne({
       attributes: [ 'id', 'email', 'username', 'bio' ],
       where: { id: userId }
     }).then(function(user) {
@@ -161,7 +163,7 @@ module.exports = {
 
     asyncLib.waterfall([
       function(done) {
-        models.User.findOne({
+        models.Users.findOne({
           attributes: ['id', 'bio'],
           where: { id: userId }
         }).then(function (userFound) {

@@ -23,7 +23,7 @@ module.exports = {
 
     asyncLib.waterfall([
       function(done) {
-        models.Message.findOne({
+        models.Messages.findOne({
           where: { id: messageId }
         })
         .then(function(messageFound) {
@@ -35,7 +35,7 @@ module.exports = {
       },
       function(messageFound, done) {
         if(messageFound) {
-          models.User.findOne({
+          models.Users.findOne({
             where: { id: userId }
           })
           .then(function(userFound) {
@@ -120,7 +120,7 @@ module.exports = {
 
    asyncLib.waterfall([
     function(done) {
-       models.Message.findOne({
+       models.Messages.findOne({
          where: { id: messageId }
        })
        .then(function(messageFound) {
@@ -132,7 +132,7 @@ module.exports = {
      },
      function(messageFound, done) {
        if(messageFound) {
-         models.User.findOne({
+         models.Users.findOne({
            where: { id: userId }
          })
          .then(function(userFound) {
