@@ -44,6 +44,7 @@ module.exports = {
           models.Messages.create({
             title  : title,
             content: content,
+            attachment: 0,
             likes  : 0,
             userId : userFound.id
           })
