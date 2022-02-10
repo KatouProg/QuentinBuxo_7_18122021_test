@@ -8,7 +8,7 @@
           </li>
         </router-link>
 
-        <router-link to="/userinfos" class="link">
+        <router-link to="/userInfos" class="link">
           <li v-if="user.imageProfile">
             <img
               :src="user.imageProfile"

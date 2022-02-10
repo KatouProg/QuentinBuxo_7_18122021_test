@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Messages.init({
-    title: DataTypes.STRING,
     content: DataTypes.STRING,
     attachment: DataTypes.STRING,
     likes: DataTypes.INTEGER

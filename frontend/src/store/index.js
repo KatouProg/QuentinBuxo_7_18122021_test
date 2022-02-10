@@ -1,9 +1,8 @@
 import { createStore } from 'vuex'
-
 const axios = require('axios');
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/api'
+  baseURL: 'http://localhost:8080/api/'
 });
 
 let user = localStorage.getItem('user');
@@ -30,9 +29,10 @@ const store = createStore({
     status: '',
     user: user,
     userInfos: {
-      email: '',
       username:'',
-      bio: '',
+      email: '',
+      bio:'',
+      photo: '',
     },
   },
   mutations: {
@@ -59,7 +59,7 @@ const store = createStore({
     login: ({commit}, userInfos) => {
       commit('setStatus', 'loading');
       return new Promise((resolve, reject) => {
-        instance.post('/users/login', userInfos)
+        instance.post('users/login', userInfos)
         .then(function (response) {
           commit('setStatus', '');
           commit('logUser', response.data);
@@ -71,11 +71,11 @@ const store = createStore({
         });
       });
     },
-    register: ({commit}, userInfos) => {
+    createAccount: ({commit}, userInfos) => {
       commit('setStatus', 'loading');
       return new Promise((resolve, reject) => {
         commit;
-        instance.post('/users/register', userInfos)
+        instance.post('users/register', userInfos)
         .then(function (response) {
           commit('setStatus', 'created');
           resolve(response);
@@ -87,16 +87,13 @@ const store = createStore({
       });
     },
     getUserInfos: ({commit}) => {
-      instance.post('/users/me/')
+      instance.post('/userInfos')
       .then(function (response) {
         commit('userInfos', response.data.infos);
       })
       .catch(function () {
       });
-    },
-    logout: async ({ commit }) => {
-      commit("logout");
-    },
+    }
   }
 })
 

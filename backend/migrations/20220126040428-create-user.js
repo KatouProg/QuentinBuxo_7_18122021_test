@@ -20,9 +20,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      image: {
+        allowNull: false,
+        type: Sequelize.STRING(500),
+      },
       bio: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      role: {
+        allowNull: false,
+        type: Sequelize.STRING(100),
       },
       isAdmin: {
         allowNull: false,

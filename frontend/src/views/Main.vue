@@ -1,10 +1,11 @@
 <!--MAIN section with the "wall" and all the posts from different users-->
 <template>
   <div class="main-page">
-    <TheHeader userName="$user.username"></TheHeader>
+    <TheHeader username="user.username"></TheHeader>
     <section class="content">
       <div class="the-wall">
         <form action="">
+
           <input
             type="text"
             :placeholder="'  What\'s up' + ' ' + user.username"
@@ -95,12 +96,11 @@ export default {
 
         formData.append("content", this.newPost);
         formData.append("userId", this.$store.state.user.userId);
-        formData.append("username", this.$store.state.user.username);
         if (imageFile) {
           formData.append("image", imageFile);
         }
 
-        await fetch("http://localhost:8080/api/messages", {
+        await fetch("http://localhost:8080/api/messages/new", {
           method: "POST",
           body: formData,
           headers: {
@@ -126,22 +126,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 $color-primary: #fc2c04;
 $color-secondary: #fad8d3;
+
 .main-page {
   width: 100%;
   .content {
     width: 100%;
     list-style: none;
+    display: flex;
   }
 
   .error-message {
     color: red;
   }
+
   .write-post {
+    flex-grow: 1;
     width: 35rem;
     margin-top: 3rem;
-    height: 3rem;
+    height: 4rem;
     border-radius: 10px;
     margin-bottom: 1rem;
   }

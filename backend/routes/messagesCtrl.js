@@ -4,7 +4,6 @@ var asyncLib = require('async');
 var jwtUtils = require('../utils/jwt.utils');
 
 // Constants
-const TITLE_LIMIT   = 2;
 const CONTENT_LIMIT = 4;
 const ITEMS_LIMIT   = 50;
 
@@ -16,14 +15,13 @@ module.exports = {
     var userId      = jwtUtils.getUserId(headerAuth);
     console.log(jwtUtils.getUserId);
     // Params
-    var title   = req.body.title;
     var content = req.body.content;
 
-    if (title == null || content == null) {
+    if (content == null) {
       return res.status(400).json({ 'error': 'missing parameters' });
     }
 
-    if (title.length <= TITLE_LIMIT || content.length <= CONTENT_LIMIT) {
+    if (content.length <= CONTENT_LIMIT) {
       return res.status(400).json({ 'error': 'invalid parameters' });
     }
 
@@ -42,7 +40,6 @@ module.exports = {
       function(userFound, done) {
         if(userFound) {
           models.Messages.create({
-            title  : title,
             content: content,
             attachment: 0,
             likes  : 0,
@@ -75,7 +72,7 @@ module.exports = {
     }
 
     models.Messages.findAll({
-      order: [(order != null) ? order.split(':') : ['title', 'ASC']],
+      order: [(order != null) ? order.split(':') : ['createdAt', 'DESC']],
       attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
       limit: (!isNaN(limit)) ? limit : null,
       offset: (!isNaN(offset)) ? offset : null,
