@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     getUsers: async function () {
-      return fetch("http://localhost:8080/api/me")
+      return fetch("http://localhost:8080/api/users/me")
         .then((responsehttp) => {
           return responsehttp.json();
         })

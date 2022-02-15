@@ -1,73 +1,86 @@
 <template>
-  <div class="card">
-    <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
-    <h1 class="card__title" v-else>Inscription</h1>
-    <p class="card__subtitle" v-if="mode == 'login'">
-      Tu n'as pas encore de compte ?
-      <span class="card__action" @click="switchToCreateAccount()"
-        >Créer un compte</span
+  <div class="connexion-layout">
+    <div class="rightlogintitle">
+      <img src="../assets/logoheader.png" alt="groupomamia logo" />
+      <span class="slogan" aria-label="label"
+        ><i>"La communication est indispensable, jamais suffisante."</i><br><br>Communiquons plus !!!</span
       >
-    </p>
-    <p class="card__subtitle" v-else>
-      Tu as déjà un compte ?
-      <span class="card__action" @click="switchToLogin()">Se connecter</span>
-    </p>
-    <div class="form-row">
+    </div>
+    <div class="userlog">
       <input
         v-model="email"
-        class="form-row__input"
-        type="text"
-        placeholder="Adresse mail"
+        type="email"
+        placeholder="Email"
+        aria-label="email"
       />
-    </div>
-    <div class="form-row" v-if="mode == 'create'">
-      <input
-        v-model="username"
-        class="form-row__input"
-        type="text"
-        placeholder="Nom"
-      />
-      <input
-        v-model="bio"
-        class="form-row__input"
-        type="text"
-        placeholder="Bio"
-      />
-    </div>
-    <div class="form-row">
       <input
         v-model="password"
-        class="form-row__input"
         type="password"
         placeholder="Mot de passe"
+        aria-label="password"
       />
-    </div>
-    <div class="form-row" v-if="mode == 'login' && status == 'error_login'">
-      Adresse mail et/ou mot de passe invalide
-    </div>
-    <div class="form-row" v-if="mode == 'create' && status == 'error_create'">
-      Adresse mail déjà utilisée
-    </div>
-    <div class="form-row">
+      <div class="form-row" v-if="status == 'error_login'">
+        Adresse mail et/ou mot de passe invalide
+      </div>
+      <button @click="login()" class="logbtn">Connexion</button>
+      <span>Pas encore inscrit ?</span>
       <button
-        @click="login()"
-        class="button"
-        :class="{ 'button--disabled': !validatedFields }"
-        v-if="mode == 'login'"
+        @click="signupModal = true"
+        class="signup-front-btn"
+        aria-label="button"
       >
-        <span v-if="status == 'loading'">Connexion en cours...</span>
-        <span v-else>Connexion</span>
-      </button>
-      <button
-        @click="register()"
-        class="button"
-        :class="{ 'button--disabled': !validatedFields }"
-        v-else
-      >
-        <span v-if="status == 'loading'">Création en cours...</span>
-        <span v-else>Créer mon compte</span>
+        Créer un compte
       </button>
     </div>
+    <teleport to="#modals">
+      <div v-if="signupModal" class="Signup-modal">
+        <div class="overlay"></div>
+        <div class="user-signup">
+          <div class="signup-title">
+            <h1>S'inscrire</h1>
+            <p>C'est facile et rapide !</p>
+          </div>
+          <button @click="signupModal = false" class="closemodalbtn">X</button>
+          <div class="signup-form">
+            <div class="names">
+              <input
+                v-model="firstname"
+                class="fname"
+                type="text"
+                placeholder="Prénom"
+              />
+              <input
+                v-model="lastname"
+                class="lname"
+                type="text"
+                placeholder="Nom de famille"
+              />
+            </div>
+            <input
+              v-model="email"
+              type="Email"
+              placeholder="Email"
+              aria-label="email"
+            />
+            <input
+              v-model="password"
+              type="password"
+              placeholder="Mot de passe"
+              aria-label="password"
+            />
+            <div class="form-row" v-if="status == 'error_create'">
+              Adresse mail ou mot de passe incorrect
+            </div>
+            <button @click="createAccount()" class="signup-btn">
+              S'incrire
+            </button>
+          </div>
+        </div>
+      </div>
+    </teleport>
+    <footer>
+      <span>© Groupomania 2021</span>
+    </footer>
   </div>
 </template>
 
@@ -75,52 +88,25 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "Login",
-  data: function () {
+  data() {
     return {
-      mode: "login",
+      signupModal: false,
       email: "",
-      username: "",
+      firstname: "",
+      lastname: "",
       password: "",
-      bio: "",
     };
   },
   mounted: function () {
     if (this.$store.state.user.userId != -1) {
-      this.$router.push("/");
+      this.$router.push("/Profile");
       return;
     }
   },
   computed: {
-    validatedFields: function () {
-      if (this.mode == "create") {
-        if (
-          this.email != "" &&
-          this.bio != "" &&
-          this.username != "" &&
-          this.password != ""
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        if (this.email != "" && this.password != "") {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    },
     ...mapState(["status"]),
   },
   methods: {
-    switchToCreateAccount: function () {
-      this.mode = "create";
-    },
-    switchToLogin: function () {
-      this.mode = "login";
-    },
     login: function () {
       const self = this;
       this.$store
@@ -130,21 +116,21 @@ export default {
         })
         .then(
           function () {
-            self.$router.push("/home");
+            self.$router.push("/Profile");
           },
           function (error) {
             console.log(error);
           }
         );
     },
-    register: function () {
+    createAccount: function () {
       const self = this;
       this.$store
-        .dispatch("register", {
+        .dispatch("createAccount", {
           email: this.email,
-          username: this.username,
+          firstname: this.firstname,
+          lastname: this.lastname,
           password: this.password,
-          bio: this.bio,
         })
         .then(
           function () {
@@ -159,28 +145,187 @@ export default {
 };
 </script>
 
-<style scoped>
-.form-row {
+<style>
+.connexion-layout {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr;
+  width: 100vw;
+  height: 100vh;
+}
+.rightlogintitle {
+  grid-column-start: 1;
   display: flex;
-  margin: 16px 0px;
-  gap: 16px;
-  flex-wrap: wrap;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  border-radius: 10px;
+  width: 40vw;
+  height: 50vh;
+  margin: 5vh 0;
 }
-
-.form-row__input {
-  padding: 8px;
+.slogan {
+  font-size: 1.5rem;
+  color: white;
+  margin: 3rem 1.5rem 0 1.5rem;
+}
+img {
+  margin-top: 1rem;
+  width: 80%;
+}
+h1 {
+  font-size: 2rem;
+  color: #042a5f;
+}
+p {
+  font-size: 1rem;
+  color: #042a5f;
+}
+.userlog {
+  grid-column-start: 2;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 45vw;
+  margin: 5vh 0;
+  background: #d3d3d3;
+}
+input {
+  width: 90%;
+  height: 6vh;
+  border-radius: 10px;
+  margin-bottom: 2vh;
+  border: 1px solid #d3d3d3;
+  background: white;
+  text-indent: 10px;
+}
+.logbtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  height: 6vh;
+  font-size: 100%;
+  margin: 3vh 0;
+  background: #042a5f;
+  border-style: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+}
+.signup-btn,
+.signup-front-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  height: 6vh;
+  font-size: 100%;
+  margin: 3vh 0;
+  background: #2c661f;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border-style: none;
+}
+.closemodalbtn {
+  position: absolute;
+  top: 1rem;
+  right: 0.5rem;
   border: none;
-  border-radius: 8px;
-  background: #f2f2f2;
-  font-weight: 500;
-  font-size: 16px;
-  flex: 1;
-  min-width: 100px;
-  color: black;
+  background: white;
+  color: #042a5f;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
 }
-
-.form-row__input::placeholder {
-  color: #aaaaaa;
+a {
+  text-decoration: none;
+}
+.Signup-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overlay {
+  background: rgba(255, 255, 255, 0.7);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.user-signup {
+  z-index: 1;
+  position: relative;
+  width: 50vw;
+  height: auto;
+  align-items: center;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, 0.1);
+}
+.signup-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.names {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+.fname {
+  width: 45%;
+}
+.lname {
+  width: 50%;
+}
+footer {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 0;
+  width: 100vw;
+  height: 50px;
+  color: #ededed;
+  font-weight: bold;
+  background: #042a5f;
+}
+.rl-color {
+  color: white;
+}
+@media screen and (max-width: 767px) {
+  .connexion-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  .rightlogintitle,
+  .userlog {
+    width: 100vw;
+    padding-top: 1.5rem;
+  }
+  .user-signup {
+    width: 100vw;
+  }
 }
 </style>
->

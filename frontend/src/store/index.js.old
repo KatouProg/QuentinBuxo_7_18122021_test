@@ -1,0 +1,239 @@
+import { createStore } from 'vuex'
+//import router from "../router/index";
+const axios = require('axios');
+/*import ls from 'localstorage-slim'; //cryptage des donnes dans le localstorage
+ls.config.encrypt = true;*/
+
+const instance = axios.create({
+  baseURL: 'http://localhost:8080/api',
+});
+
+//let user = ls.get("user");
+let user = localStorage.getItem('user');
+if (!user) {
+ user = {
+    userId: -1,
+    token: '',
+  }; 
+} else {
+  try {
+    user = JSON.parse(user);
+    instance.defaults.headers.common['Authorization'] =  user.token;
+  } catch (ex) {
+    user = {
+      userId: -1,
+      token: '',
+    };
+  }
+}
+
+// Create a new store instance.
+
+/*const store = createStore({
+  state: {
+    status: '',
+    user: {
+      userId: user.id,
+      username:user.username,
+      token: user.accessToken,
+      email: '',
+      bio:user.bio,
+      role: user.role,
+      photo: user.imageUrl,
+      isAdmin: user.isAdmin,
+    },
+    postsLikedByUser: [],
+    commentFromPost: [],
+  },*/
+
+  /*const store = createStore({
+    state: {
+      status: '',
+      user: user,
+      userInfos: {
+        userId: user.id,
+        username:user.username,
+        token: user.accessToken,
+        bio: user.bio,
+        photo: user.imageUrl,
+        isAdmin: user.isAdmin,
+      },
+    },*/
+    
+    const store = createStore({
+      state: {
+        status: '',
+        user: user,
+        userInfos: {
+          username: '',
+          password: '',
+          bio: '',
+          photo: '',
+        },
+      },
+
+//--------------------------------------------------------
+
+  mutations: {
+    setStatus: function (state, status) {
+      state.status = status;
+    },
+
+    /*logUser: function (state, user) {
+      state.user = {};
+
+      instance.defaults.headers.common["Authorization"] = user.accessToken;
+      ls.set("user", user); //cryptage des donnees dans le localstorage
+
+      state.user.userId = user.id;
+      state.user.username = user.username;
+      state.user.token = user.accessToken;
+      state.user.photo = user.imageUrl;
+      state.user.isAdmin = user.isAdmin;
+    },
+    changeInfo: function (state, infos) {
+      if (infos.image != null) {
+        let user = ls.get("user");
+        user.imageUrl = infos.image;
+        ls.set("user", user);
+      }
+
+      state.user.photo = infos.image;
+      state.user.bio = infos.bio;
+      state.user.role = infos.role;
+    },
+    logout: function (state) {
+      state.user = {}; //on the logout we modify the userId so it become -1 again
+      state.user = {
+        userId: -1,
+        username: "",
+        token: "",
+        photo: "",
+      },
+      localStorage.clear();
+    },
+    addLikes: function (state, likes) {
+      state.postsLikedByUser = likes;
+    },
+    clearLikes: function (state) {
+      state.postsLikedByUser = [];
+    },
+    showComments: function (state, comments) {
+      state.commentFromPost = comments;
+    },
+  },*/
+
+  logUser: function (state, user) {
+    instance.defaults.headers.common['Authorization'] = user.token;
+    localStorage.setItem('user', JSON.stringify(user));
+    state.user = user;
+  },
+  userInfos: function (state, userInfos) {
+    state.userInfos = userInfos;
+  },
+  logout: function (state) {
+    state.user = {
+      userId: -1,
+      token: '',
+    }
+    localStorage.removeItem('user');
+  }
+},
+
+//--------------------------------------------------------
+
+  actions: {
+    login: 
+    /*async ({commit}, userInfos) => {
+      await instance
+        .post('/users/login', userInfos)
+        .then((response) => {
+          commit('setStatus', '');
+          commit('logUser', response.data);
+          response.data.bpi;
+        })
+        .then(() => {
+          user = ls.get("user");
+        })
+        .catch((err) => {
+          commit('setStatus', 'error_login');
+          return(err);
+        });
+    },*/
+
+    ({commit}, userInfos) => {
+      commit('setStatus', 'loading');
+      return new Promise((resolve, reject) => {
+        instance.post('/users/login', userInfos)
+        .then(function (response) {
+          commit('setStatus', '');
+          commit('logUser', response.data);
+          resolve(response);
+        })
+        .catch(function (error) {
+          commit('setStatus', 'error_login');
+          reject(error);
+        });
+      });
+    },
+    
+//----------------------------------------------------
+
+    register: 
+    /*async ({commit}, userInfos) => {
+      commit;
+      instance
+      .post('/users/register', userInfos)
+      .then((response) => {
+          commit('setStatus', 'created');
+          response.data.bpi;
+        })
+        .then(() => {
+          instance
+            .post("/users/login", userInfos)
+            .then((response) => {
+              commit("setStatus", "connected");
+              commit("logUser", response.data);
+              response.data.bpi;
+            })
+            .then(() => {
+              router.push("/home");
+              user = ls.get("user");
+            });
+        })
+        .catch((err) => {
+          commit("setStatus", "error_login");
+          console.log(err);
+        });
+    },*/
+
+    ({commit}, userInfos) => {
+      commit('setStatus', 'loading');
+      return new Promise((resolve, reject) => {
+        commit;
+        instance.post('users/register', userInfos)
+        .then(function (response) {
+          commit('setStatus', 'created');
+          resolve(response);
+        })
+        .catch(function (error) {
+          commit('setStatus', 'error_create');
+          reject(error);
+        });
+      });
+    },
+
+//--------------------------------------
+
+    getUserInfos: ({commit}) => {
+      instance.get('/users/me')
+      .then(function (response) {
+        commit('userInfos', response.data.infos);
+      })
+      .catch(function () {
+      });
+    }
+  }
+})
+
+export default store;

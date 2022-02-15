@@ -10,8 +10,8 @@
       <div class="image-details">
         <h2>Profile Picture</h2>
         <img
-          v-if="user.imageProfile"
-          :src="user.imageProfile"
+          v-if="user.photo"
+          :src="user.photo"
           alt=""
           class="profil-picture"
         />
@@ -22,7 +22,7 @@
           class="profil-picture"
         />
         <form action="">
-          <label v-if="user.imageProfile" for="avatar"
+          <label v-if="user.photo" for="avatar"
             >Update your profile picture
           </label>
           <label v-else for="avatar">Choisissez votre avatar: </label>
@@ -106,10 +106,10 @@ export default {
     TheHeader: TheHeader,
   },
   computed: {
-    ...mapState(["user"]),
+    ...mapState({user: 'userInfos'}),//   (['userInfos'])
   },
   mounted: function () {
-    this.getUserInfo();
+    this.getUserInfos();
     if (
       //if the user is not connected his userId is -1 in the store
       this.$store.state.user.userId === -1 ||
@@ -124,19 +124,19 @@ export default {
       //method to update the profile of the user
       event.preventDefault();
       this.$store
-        .dispatch("changeInfos", {
+        .dispatch("getUserInfos", {
           userId: this.$store.state.user.userId,
           image: document.querySelector("input[type=file]").files[0],
           bio: this.bio || this.$store.state.user.bio,
           role: document.querySelector(".select").value,
         })
         .then(() => {
-          this.getUserInfo();
+          this.getUserInfos();
         });
     },
-    getUserInfo: async function () {
+    changeInfos: async function () {
       let userId = this.$store.state.user.userId;
-      this.$store.dispatch("getOneUserInfos", userId);
+      this.$store.dispatch("changeInfos", userId);
     },
     deleteAccount: async function () {
       let confirmation = confirm(

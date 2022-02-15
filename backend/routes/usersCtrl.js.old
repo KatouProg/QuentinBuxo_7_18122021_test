@@ -1,7 +1,7 @@
 // Imports
 var bcrypt    = require('bcrypt');
-var jwtUtils  = require('../utils/jwt.utils');
-var models    = require('../models');
+var jwtUtils  = require('../utils.old/jwt.utils.js.old');
+var models    = require('../models/index.js.old');
 var asyncLib  = require('async');
 
 // Constants
@@ -17,6 +17,8 @@ module.exports = {
     var username = req.body.username;
     var password = req.body.password;
     var bio      = req.body.bio;
+    var imageUrl = req.body.imageUrl;
+    var role      = req.body.role;
 
     if (email == null || username == null || password == null) {
       return res.status(400).json({ 'error': 'missing parameters' });
@@ -49,7 +51,7 @@ module.exports = {
       },
       function(userFound, done) {
         if (!userFound) {
-          bcrypt.hash(password, 5, function( err, bcryptedPassword ) {
+          bcrypt.hash(password, 15, function( err, bcryptedPassword ) {
             done(null, userFound, bcryptedPassword);
           });
         } else {
@@ -62,6 +64,8 @@ module.exports = {
           username: username,
           password: bcryptedPassword,
           bio: bio,
+          imageUrl: imageUrl,
+          role: role,
           isAdmin: 0
         })
         .then(function(newUser) {
@@ -141,7 +145,7 @@ module.exports = {
       return res.status(400).json({ 'error': 'wrong token' });
 
     models.Users.findOne({
-      attributes: [ 'id', 'email', 'username', 'bio' ],
+      attributes: [ 'id', 'email', 'username', 'bio', 'imageUrl' ],
       where: { id: userId }
     }).then(function(user) {
       if (user) {
@@ -159,12 +163,14 @@ module.exports = {
     var userId      = jwtUtils.getUserId(headerAuth);
 
     // Params
-    var bio = req.body.bio;
+    var bio       = req.body.bio;
+    var imageUrl  = req.body.imageUrl;
+    var role      = req.body.role;
 
     asyncLib.waterfall([
       function(done) {
         models.Users.findOne({
-          attributes: ['id', 'bio'],
+          attributes: ['id', 'bio','imageUrl'],
           where: { id: userId }
         }).then(function (userFound) {
           done(null, userFound);
@@ -176,7 +182,9 @@ module.exports = {
       function(userFound, done) {
         if(userFound) {
           userFound.update({
-            bio: (bio ? bio : userFound.bio)
+            bio: (bio ? bio : userFound.bio),
+            imageUrl: (imageUrl ? imageUrl : userFound.imageUrl),
+            role: (role ? role : userFound.role)
           }).then(function() {
             done(userFound);
           }).catch(function(err) {

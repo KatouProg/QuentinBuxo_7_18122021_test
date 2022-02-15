@@ -1,34 +1,35 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Login from "@/views/Login.vue";
-import Home from "@/views/Main.vue";
-import UserInfos from "../views/UserInfos.vue";
-import Team from "../views/Team.vue";
 
 
 const routes = [
-  { 
-    name: 'login',
-    path: '/', 
-    component: Login,
-  },
-  { 
-    name: 'home',
-    path: '/home', 
-    component: Home, 
-    props:true 
+  {
+    path: '/',
+    name: 'Login',
+    component: () => import('../views/Login.vue')
   },
   {
-    path: "/userInfos",
-    name: "UserInfos",
-    component: UserInfos,
+    path: '/Home',
+    name: 'Homep',
+    component: () => import('../views/Home.vue')
   },
   {
-    path: "/team",
-    name: "Team",
-
-    component: Team,
+    path: '/Timeline',
+    name: 'TimeLine',
+    component: () => import('../views/Home.vue')
   },
+  {
+    path: '/Profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue'),
+    props: true,
+  },
+  {
+    path: '/Profile/:userId',
+    name: 'UserProfile',
+    component: () => import('../views/UserProfile.vue')
+  }
 ]
+
 
 const router = createRouter({
   history: createWebHistory(),

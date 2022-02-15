@@ -9,9 +9,9 @@
         </router-link>
 
         <router-link to="/userInfos" class="link">
-          <li v-if="user.imageProfile">
+          <li v-if="user.photo">
             <img
-              :src="user.imageProfile"
+              :src="user.photo"
               alt="profile picture"
               class="profil-picture"
             />
@@ -25,7 +25,7 @@
           </li>
         </router-link>
 
-        <router-link to="/" class="link header-link">
+        <router-link to="/login" class="link header-link">
           <li class="header-link" @click="clearStorage">
             <i class="fas fa-power-off" @click="clearStorage"></i
             ><span class="legende">Logout</span>
