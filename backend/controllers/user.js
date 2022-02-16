@@ -1,14 +1,19 @@
+// Imports
 const models = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
+// Constants
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/;
 
+// Routes
 module.exports = {
   signup: function (req, res) {
-    //params
+   
+    // Params
     let email = req.body.email;
     let firstname = req.body.firstname;
     let lastname = req.body.lastname;
@@ -27,14 +32,9 @@ module.exports = {
     }
 
     if (!PASSWORD_REGEX.test(password)) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "password invalid (must length 4 - 8 and include 1 number at least)",
-        });
+      return res.status(400).json({error:"password invalid (must length 4 - 8 and include 1 number at least)"});
     }
-
+    
     models.User.findOne({ where: { email: req.body.email } })
       .then((result) => {
         if (result) {
@@ -62,14 +62,10 @@ module.exports = {
               };
               models.User.create(user)
                 .then((result) => {
-                  res
-                    .status(201)
-                    .json({ message: "User created successfully" });
+                  res.status(201).json({ message: "User created successfully" });
                 })
                 .catch((error) => {
-                  res.status(500).json({
-                    message: "something went wrong",
-                  });
+                  res.status(500).json({ message: "something went wrong" });
                 });
             });
           });
@@ -83,7 +79,7 @@ module.exports = {
     models.User.findOne({ where: { email: req.body.email } })
       .then((user) => {
         if (user === null) {
-          res.status(401).json({ message: "invalid credentials!" });
+          res.status(401).json({ message: "missing parameters" });
         } else {
           bcrypt.compare(
             req.body.password,
