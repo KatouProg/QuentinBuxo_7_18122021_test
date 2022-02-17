@@ -2,12 +2,13 @@
 const models = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+var asyncLib  = require('async');
 require('dotenv').config();
 
 // Constants
 const EMAIL_REGEX =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/;
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,12}$/;
 
 // Routes
 module.exports = {
@@ -32,83 +33,109 @@ module.exports = {
     }
 
     if (!PASSWORD_REGEX.test(password)) {
-      return res.status(400).json({error:"password invalid (must length 4 - 8 and include 1 number at least)"});
+      return res.status(400).json({error:"password invalid (must length 4 - 12 and include 1 number at least)"});
     }
     
-    models.User.findOne({ where: { email: req.body.email } })
-      .then((result) => {
-        if (result) {
-          res.status(409).json({ message: "email already exist" });
-        } else {
-          bcrypt.genSalt(10, function (err, salt) {
-            bcrypt.hash(req.body.password, salt, function (error, hash) {
-              const user = {
-                email: req.body.email,
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                bio: req.body.bio,
-                imageUrl: req.file
-                  ? `${req.protocol}://${req.get("host")}/images/${
-                      req.file.filename
-                    }`
-                  : null,
-                bgUrl: req.file
-                  ? `${req.protocol}://${req.get("host")}/images/${
-                      req.file.filename
-                    }`
-                  : null,
-                password: hash,
-                isAdmin: 0,
-              };
-              models.User.create(user)
-                .then((result) => {
-                  res.status(201).json({ message: "User created successfully" });
-                })
-                .catch((error) => {
-                  res.status(500).json({ message: "something went wrong" });
-                });
-            });
+    asyncLib.waterfall([
+      function(done) {
+        models.User.findOne({
+          attributes: ['email'],
+          where: { email: email }
+        })
+        .then(function(result) {
+          done(null, result);
+        })
+        .catch(function(err) {
+          return res.status(500).json({ 'error': 'unable to verify user' });
+        });
+      },
+      function(result, done) {
+        if (!result) {
+          bcrypt.hash(password, 15, function( err, bcryptedPassword ) {
+            done(null, result, bcryptedPassword);
           });
-        }
-      })
-      .catch((error) => {
-        res.status(500).json({ message: "something went wrong !!!" });
-      });
-  },
-  login: function login(req, res) {
-    models.User.findOne({ where: { email: req.body.email } })
-      .then((user) => {
-        if (user === null) {
-          res.status(401).json({ message: "missing parameters" });
         } else {
-          bcrypt.compare(
-            req.body.password,
-            user.password,
-            function (err, result) {
-              if (result) {
-                jwt.sign(
-                  {
-                    email: user.email,
-                    userId: user.id,
-                  },
-                  process.env.SECRET_TOKEN,
-                  function (err, token) {
-                    res.status(200).json({
-                      user: user.id,
-                      token: token,
-                    });
-                  }
-                );
-              } else {
-                res.status(401).json({ message: "invalid credentials!" });
-              }
-            }
-          );
+          return res.status(409).json({ 'error': 'user already exist' });
         }
-      })
-      .catch((error) => {
-        res.status(500).json({ message: "something went wrong ;)))" });
-      });
+      },
+      function(result, bcryptedPassword, done) {
+        var newUser = models.User.create({
+          email: req.body.email,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          bio: req.body.bio,
+          imageUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null,
+          bgUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null,
+          password: bcryptedPassword,
+          isAdmin: 0
+        })
+        .then(function(newUser) {
+          done(newUser);
+        })
+        .catch(function(err) {
+          console.log(err);
+          return res.status(500).json({ 'error': 'cannot add user' });
+        });
+      }
+    ], function(newUser) {
+      if (newUser) {
+        return res.status(201).json({
+          'userId': newUser.id
+        });
+      } else {
+        console.log(err);
+        return res.status(500).json({ 'error': 'cannot add user' });
+      }
+    });
+  },
+  login: function(req, res) {
+    
+    // Params
+    var email    = req.body.email;
+    var password = req.body.password;
+
+    if (email == null ||  password == null) {
+      return res.status(400).json({ 'error': 'missing parameters' });
+    }
+
+    asyncLib.waterfall([
+      function(done) {
+        models.User.findOne({
+          where: { email: email }
+        })
+        .then(function(userFound) {
+          done(null, userFound);
+        })
+        .catch(function(err) {
+          return res.status(500).json({ 'error': 'unable to verify user' });
+        });
+      },
+      function(userFound, done) {
+        if (userFound) {
+          bcrypt.compare(password, userFound.password, function(errBycrypt, resBycrypt) {
+            done(null, userFound, resBycrypt);
+          });
+        } else {
+          return res.status(404).json({ 'error': 'user not exist in DB' });
+        }
+      },
+      function(userFound, resBycrypt, done) {
+        if(resBycrypt) {
+          done(userFound);
+        } else {
+          return res.status(403).json({ 'error': 'invalid password' });
+        }
+      }
+    ], function(userFound) {
+      if (userFound) {
+        return res.status(201).json({
+          'userId': userFound.id,
+          'token': process.env.SECRET_TOKEN,
+        });
+      } else {
+        return res.status(500).json({ 'error': 'cannot log on user' });
+      }
+    });
   },
   getAllUsers: function (req, res) {
     models.User.findAll()
@@ -121,42 +148,73 @@ module.exports = {
         });
       });
   },
-  getUserProfile: function (req, res) {
-    const userId = req.params.id;
-    models.User.findByPk(userId)
-      .then(function (user) {
-        if (user) {
-          res.status(201).json(user);
+  getUserProfile: function(req, res) {
+    // Getting auth header
+    var headerAuth  = req.headers['authorization'];
+    var userId      = jwtUtils.getUserId(headerAuth);
+
+    if (userId < 0)
+      return res.status(400).json({ 'error': 'wrong token' });
+
+    models.User.findOne({
+      attributes: [ 'id', 'email', 'username', 'bio', 'imageUrl', 'bgUrl' ],
+      where: { id: userId }
+    }).then(function(user) {
+      if (user) {
+        res.status(201).json(user);
+      } else {
+        res.status(404).json({ 'error': 'user not found' });
+      }
+    }).catch(function(err) {
+      res.status(500).json({ 'error': 'cannot fetch user' });
+    });
+  },
+  editUserProfile: function(req, res) {
+    // Getting auth header
+    var headerAuth  = req.headers['authorization'];
+    var userId      = jwtUtils.getUserId(headerAuth);
+
+    // Params
+    var bio       = req.body.bio;
+    var imageUrl  = req.body.imageUrl;
+    var role      = req.body.role;
+
+    asyncLib.waterfall([
+      function(done) {
+        models.Users.findOne({
+          attributes: ['id', 'bio','imageUrl', 'bgUrl'],
+          where: { id: userId }
+        }).then(function (userFound) {
+          done(null, userFound);
+        })
+        .catch(function(err) {
+          return res.status(500).json({ 'error': 'unable to verify user' });
+        });
+      },
+      function(userFound, done) {
+        if(userFound) {
+          userFound.update({
+            bio: (bio ? bio : userFound.bio),
+            imageUrl: (imageUrl ? imageUrl : userFound.imageUrl),
+            bgUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+          }).then(function() {
+            done(userFound);
+          }).catch(function(err) {
+            res.status(500).json({ 'error': 'cannot update user' });
+          });
         } else {
-          res.status(404).json({ error: "user not found" });
+          res.status(404).json({ 'error': 'user not found' });
+        }
+      },
+    ], function(userFound) {
+      if (userFound) {
+        return res.status(201).json(userFound);
+      } else {
+        return res.status(500).json({ 'error': 'cannot update user profile' });
         }
       })
-      .catch(function (err) {
-        res.status(500).json({ error: "cannot fetch user" });
-      });
   },
-  editUserProfile: function (req, res) {
-    const userId = req.params.id;
-    const updatedProfile = {
-      bio: req.body.bio,
-      imageUrl: req.file
-        ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-        : null,
-    };
 
-    models.User.update(updatedProfile, { where: { id: userId } })
-      .then((result) => {
-        res.status(200).json({
-          message: "Profil updated successfully",
-          post: updatedProfile,
-        });
-      })
-      .catch((error) => {
-        res.status(200).json({
-          message: "Somenthing went wrong",
-        });
-      });
-  },
   editUserOverlay: function (req, res) {
     const userId = req.params.id;
     const updatedProfile = {

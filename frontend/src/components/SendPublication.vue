@@ -13,7 +13,7 @@
             class="postlink-container"
             role="button"
           >
-            Que voulez vous dire, {{ userInfos.firstname }} ?
+            Que voulez vous dire {{ userInfos.firstname }} ?
           </div>
         </div>
       </div>

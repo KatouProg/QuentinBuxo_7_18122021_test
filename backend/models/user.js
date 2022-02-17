@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.User.hasMany(models.Publication,{ onDelete: 'CASCADE', hooks: true } );
+      models.User.hasMany(models.Publication,{ onDelete: 'CASCADE', hooks: true });
       models.User.hasMany(models.Comment, { onDelete: 'CASCADE', hooks: true });
       models.User.hasMany(models.Likes, { onDelete: 'CASCADE', hooks: true });
     }
