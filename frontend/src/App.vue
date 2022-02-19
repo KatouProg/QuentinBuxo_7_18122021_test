@@ -13,6 +13,7 @@ body, #app{
   margin: 0;
   padding: 0;
   width: 100vw;
+  height: 100%;
   box-sizing: border-box;
   background-image: url('./assets/bg.jpg');
   background-position: center;

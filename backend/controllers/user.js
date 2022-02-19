@@ -130,8 +130,8 @@ module.exports = {
       if (userFound) {
         return res.status(201).json({
           'userId': userFound.id,
-          'token': process.env.SECRET_TOKEN,
-        });
+          'token': jwt.sign({ id: userFound.id }, process.env.SECRET_TOKEN, {expiresIn: 86400})
+        })
       } else {
         return res.status(500).json({ 'error': 'cannot log on user' });
       }
@@ -149,9 +149,9 @@ module.exports = {
       });
   },
   getUserProfile: function(req, res) {
-    // Getting auth header
-    var headerAuth  = req.headers['authorization'];
-    var userId      = jwtUtils.getUserId(headerAuth);
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
+    const userId = decodedToken.userId
 
     if (userId < 0)
       return res.status(400).json({ 'error': 'wrong token' });
@@ -170,18 +170,17 @@ module.exports = {
     });
   },
   editUserProfile: function(req, res) {
-    // Getting auth header
-    var headerAuth  = req.headers['authorization'];
-    var userId      = jwtUtils.getUserId(headerAuth);
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
+    const userId = decodedToken.userId
 
     // Params
     var bio       = req.body.bio;
     var imageUrl  = req.body.imageUrl;
-    var role      = req.body.role;
 
     asyncLib.waterfall([
       function(done) {
-        models.Users.findOne({
+        models.User.findOne({
           attributes: ['id', 'bio','imageUrl', 'bgUrl'],
           where: { id: userId }
         }).then(function (userFound) {
@@ -214,6 +213,9 @@ module.exports = {
         }
       })
   },
+
+
+//=========================== A REVOIR ============================
 
   editUserOverlay: function (req, res) {
     const userId = req.params.id;

@@ -143,7 +143,7 @@ const store = createStore({
       });
     },
     getUserInfos: ({ commit, state }) => {
-      instance.get(`users/${state.user.user}`)
+      instance.get(`users/${state.user.userId}`)
         .then(function (response) {
           commit('USER_INFOS', response.data);
         })
