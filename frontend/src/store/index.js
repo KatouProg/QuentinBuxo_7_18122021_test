@@ -65,7 +65,7 @@ const store = createStore({
       state.publications = publications;
     },
     ADD_PUBLICATION: function (state, newPublication) {
-      state.publications.unshift(newPublication);
+      state.publications.unshift(newPublication); // unshift => ajoute un ou plusieurs éléments au début d'un tableau et renvoie la nouvelle longueur du tableau.
     },
     UPDATE_PUBLICATION: function (state, modifiedPublication) {
       const publicationIndex = state.publications.findIndex(
@@ -223,10 +223,11 @@ const store = createStore({
         .then(function (response) {
           console.log(response.data)
           commit('ADD_PUBLICATION', response.data);
-          window.location.reload();
+          window.location.reload(); //reload the page 
         })
         .catch(error => {
-          console.log({ error: error })
+          console.log({ error: error });
+          console.log("==== publication impossible - store 229 ====");
         })
     },
     UpdatePublication({ commit }, data) {

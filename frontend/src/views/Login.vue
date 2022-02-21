@@ -116,7 +116,7 @@ export default {
         })
         .then(
           function () {
-            self.$router.push("/Profile");
+            self.$router.push("/Home");
           },
           function (error) {
             console.log(error);

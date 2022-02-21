@@ -99,7 +99,7 @@ module.exports = {
                 });
             }).catch(error => {
                 res.status(200).json({
-                    message: "Somenthing went wrong",
+                    message: "Something went wrong",
                     error : erro
                 });
             })

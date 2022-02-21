@@ -46,7 +46,7 @@ module.exports = {
           done(null, result);
         })
         .catch(function(err) {
-          return res.status(500).json({ 'error': 'unable to verify user' });
+          return res.status(500).json({ 'error': 'unable to verify user !' });
         });
       },
       function(result, done) {
@@ -130,7 +130,7 @@ module.exports = {
       if (userFound) {
         return res.status(201).json({
           'userId': userFound.id,
-          'token': jwt.sign({ id: userFound.id }, process.env.SECRET_TOKEN, {expiresIn: 86400})
+          'token': jwt.sign({ id: userFound.id }, process.env.SECRET_TOKEN, {expiresIn: '3600s'})
         })
       } else {
         return res.status(500).json({ 'error': 'cannot log on user' });
@@ -150,33 +150,36 @@ module.exports = {
   },
   getUserProfile: function(req, res) {
     const token = req.headers.authorization.split(' ')[1]
-    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
-    const userId = decodedToken.userId
+    const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
+    const userId = userFound.id
 
     if (userId < 0)
       return res.status(400).json({ 'error': 'wrong token' });
 
     models.User.findOne({
-      attributes: [ 'id', 'email', 'username', 'bio', 'imageUrl', 'bgUrl' ],
+      attributes: [ 'id', 'email', 'firstname', 'lastname', 'bio', 'imageUrl', 'bgUrl' ],
       where: { id: userId }
-    }).then(function(user) {
-      if (user) {
-        res.status(201).json(user);
+    })
+    .then((userFound) => {
+      if (userFound) {
+        res.status(201).json(userFound);
       } else {
         res.status(404).json({ 'error': 'user not found' });
       }
-    }).catch(function(err) {
+    })
+    .catch((err) => {
       res.status(500).json({ 'error': 'cannot fetch user' });
     });
   },
   editUserProfile: function(req, res) {
     const token = req.headers.authorization.split(' ')[1]
-    const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
-    const userId = decodedToken.userId
+    const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
+    const userId = userFound.id
 
     // Params
     var bio       = req.body.bio;
     var imageUrl  = req.body.imageUrl;
+    var bgUrl  = req.body.bgUrl;
 
     asyncLib.waterfall([
       function(done) {
@@ -195,7 +198,7 @@ module.exports = {
           userFound.update({
             bio: (bio ? bio : userFound.bio),
             imageUrl: (imageUrl ? imageUrl : userFound.imageUrl),
-            bgUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+            bgUrl: (bgUrl ? bgUrl : userFound.bgUrl)
           }).then(function() {
             done(userFound);
           }).catch(function(err) {
@@ -218,7 +221,9 @@ module.exports = {
 //=========================== A REVOIR ============================
 
   editUserOverlay: function (req, res) {
-    const userId = req.params.id;
+    const token = req.headers.authorization.split(' ')[1]
+    const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
+    const userId = userFound.id
     const updatedProfile = {
       bgUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     };
