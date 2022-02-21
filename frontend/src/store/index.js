@@ -161,7 +161,8 @@ const store = createStore({
         });
     },
     editUser: ({ state, commit }, file) => {
-      instance.put(`users/${state.user.user}`, file,
+      console.log(file);
+      instance.put(`users/${state.user.userId}`, file,
       {'Content-Type' : 'application/form-data'})
         .then(response => {
           console.log(response.data)
@@ -173,7 +174,7 @@ const store = createStore({
         });
     },
     editUserBio: ({ state, commit },bio) => {
-      instance.put(`users/${state.user.user}`, bio,
+      instance.put(`users/${state.user.userId}`, bio,
       {'Content-Type' : 'application/form-data'})
         .then(response => {
           console.log(response.data)
@@ -185,7 +186,7 @@ const store = createStore({
         });
     },
     editUserOverlay: ({ state, commit }, file) => {
-      instance.put(`users/${state.user.user}/overlay`, file,
+      instance.put(`users/${state.user.userId}/overlay`, file,
       {'Content-Type' : 'application/form-data'})
         .then(response => {
           console.log(response.data)
@@ -262,8 +263,8 @@ const store = createStore({
           console.log({ error: error })
         })
     },
-    addComment({ commit }, comment) {
-      instance.post(`publications/${comment.id}/comments`,comment,
+    addComment({ commit }, publication, comment) {
+      instance.post(`publications/${publication.id}/comments`,comment,
       {'Content-Type' : 'application/form-data'})
         .then(function (response) {
           console.log(response)

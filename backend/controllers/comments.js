@@ -8,7 +8,8 @@ module.exports = {
         publicationId: req.params.publicationId,
         content: req.body.content,
     }
-    models.Comment.create(comment).then(result => {
+    models.Comment.create(comment)
+    .then(result => {
         res.status(201).json({
             message: 'Comment created successfully',
             post: result

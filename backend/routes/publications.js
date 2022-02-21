@@ -16,7 +16,7 @@ router.delete('/:id',auth, publicationsCtrl.deletePublication);
 router.post('/:id/like',auth, publicationsCtrl.likes)
 router.get('/:id/likes', auth, publicationsCtrl.getAllLikes)
 
-router.post('/:publicationId/comments', auth, commentsCtrl.createComment);
+router.post('/:publications/publicationId/comments', auth, commentsCtrl.createComment);
 router.get('/:publicationId/comments',auth, commentsCtrl.getAllComments);
 router.get('/:publicationId/comments/:id',auth, commentsCtrl.getOneComment);
 router.put('/:publicationId/comments/:id',auth, commentsCtrl.updateComment);

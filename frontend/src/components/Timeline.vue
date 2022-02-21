@@ -44,13 +44,13 @@
               @click="deletePublication(publication.id, publication.userId)"
               class="delete-btn"
             >
-              Supprimer la publication
+              Supprimer le post
             </button>
             <button
               @click="displayModificationModal(publication), (editModal = true)"
               class="edit-btn"
             >
-              Modififer la publication
+              Modifier le post
             </button>
           </div>
         </div>
@@ -91,7 +91,7 @@
                 getAllcomments(publication.id),
                   (commentsContainer = publication.id)
               "
-              >commentaires</span
+              >Commentaires</span
             >
           </div>
         </div>

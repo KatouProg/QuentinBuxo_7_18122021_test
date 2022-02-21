@@ -49,7 +49,7 @@
                   class="user-bg_edit"
                   src="../assets/photo.png"
                   alt="overlay profil utilisateur"
-                />Changer la photo de profile
+                />Changer la photo de profil
               </button>
             </div>
             <input
@@ -170,8 +170,10 @@ export default {
       this.userAvatar = URL.createObjectURL(files[0]);
     },
     editUserAvatar() {
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append("image", this.files);
+      formData.append("toto", "tata");
+      console.log(formData, this.files, formData.get("image"));
       this.$store.dispatch("editUser", formData);
     },
     onPickOverlay() {
@@ -201,8 +203,7 @@ export default {
         bio: currentProfileUser.bio,
       });
     },
-  },
-  deleteAccount() {
+    deleteAccount() {
     const user = this.userInfos;
     this.$store
       .dispatch("deleteAccount", {
@@ -213,6 +214,7 @@ export default {
       .then(function (error) {
         console.log(error);
       });
+    },
   },
 };
 </script>
@@ -232,7 +234,6 @@ export default {
   border-radius: 10px;
   width: 60%;
   height: 100%;
-  background: black;
 }
 .user_profile-pictures {
   position: relative;
@@ -245,8 +246,7 @@ export default {
 .user-bg_box {
   position: relative;
   width: 60vw;
-  height: 35vh;
-  background: black;
+  height: 100%;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -270,13 +270,14 @@ export default {
   background: white;
   border-radius: 8px;
   border: solid 1px grey;
-  width: 35%;
+  width: auto;
   cursor: pointer;
 }
 .user-bg_edit {
   border-radius: 100%;
   width: 2vw;
   margin-right: 3px;
+  margin-bottom: 2px;
 }
 .file-upload_bnt {
   display: none;
@@ -333,7 +334,7 @@ export default {
   background: white;
   border-radius: 8px;
   border: solid 1px grey;
-  width: 40%;
+  width: auto;
   cursor: pointer;
 }
 .profile-data {
@@ -429,10 +430,22 @@ export default {
   border: 2px solid #042a5f;
   color: #042a5f;
 }
-@media screen and (max-width: 767px) {
-  .profile-pictures {
-    width: 100%;
-  }
+@media screen and (max-width: 1160px) {
+  
+  .edit-bg_btn {
+  position: absolute;
+  z-index: 10;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  border: solid 1px grey;
+  width: auto;
+  cursor: pointer;
+}
+
   .profile-data {
     width: 100%;
   }

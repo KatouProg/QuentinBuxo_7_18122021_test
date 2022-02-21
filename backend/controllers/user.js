@@ -171,21 +171,24 @@ module.exports = {
       res.status(500).json({ 'error': 'cannot fetch user' });
     });
   },
+
   editUserProfile: function(req, res) {
     const token = req.headers.authorization.split(' ')[1]
     const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
     const userId = userFound.id
+
+    const updatedProfilePic = {
+      imageUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null,
+    };
     
-
     // Params
-    var bio       = req.body.bio;
-    var imageUrl  = req.body.imageUrl;
-    var bgUrl  = req.body.bgUrl;
+    var bio= req.body.bio;
 
+    
     asyncLib.waterfall([
       function(done) {
         models.User.findOne({
-          attributes: ['id', 'bio','imageUrl', 'bgUrl'],
+          attributes: ['id', 'bio','imageUrl'],
           where: { id: userId }
         }).then(function (userFound) {
           done(null, userFound);
@@ -198,8 +201,7 @@ module.exports = {
         if(userFound) {
           userFound.update({
             bio: (bio ? bio : userFound.bio),
-            imageUrl: (imageUrl ? imageUrl : userFound.imageUrl),
-            bgUrl: (bgUrl ? bgUrl : userFound.bgUrl)
+            imageUrl: (updatedProfilePic.imageUrl ? updatedProfilePic.imageUrl : userFound.imageUrl),
           }).then(function() {
             done(userFound);
           }).catch(function(err) {
@@ -210,15 +212,16 @@ module.exports = {
         }
       },
       function (done){
-        models.User.update(updatedProfile, { where: { id: userId } })
+        models.User.update(updatedProfilePic, { where: { id: userId } })
       .then((result) => {
+        done(null, userFound);
         res.status(200).json({
-          message: "Overlay updated successfully",
-          post: updatedProfile,
+          message: "Profile pic updated successfully",
+          post: updatedProfilePic,
         });
       })
       .catch((error) => {
-        res.status(200).json({
+        res.status(401).json({
           message: "Something went wrong",
           error: result,
         });
@@ -234,12 +237,11 @@ module.exports = {
   },
 
 
-//=========================== A REVOIR ============================
-
   editUserOverlay: function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
     const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
     const userId = userFound.id
+
     const updatedProfile = {
       bgUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     };
@@ -258,10 +260,17 @@ module.exports = {
         });
       });
   },
+
+
+  //=========================== A REVOIR ============================//
+
   deleteAccount: async function (req, res) {
     try {
       // Read
-      const userId = req.body.userId;
+      const token = req.headers.authorization.split(' ')[1]
+      const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
+      const userId = userFound.id
+
       const idToDelete = req.params.id;
       if (!userId || !idToDelete) {
         res.status(401).json({ message: "request invalid" });
