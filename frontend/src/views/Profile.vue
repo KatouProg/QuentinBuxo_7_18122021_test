@@ -229,10 +229,10 @@ export default {
 }
 .user_profile {
   position: relative;
-  background: white;
+  border-radius: 10px;
   width: 60%;
-  height: auto;
-  background: #d3d3d3;
+  height: 100%;
+  background: black;
 }
 .user_profile-pictures {
   position: relative;
@@ -246,7 +246,7 @@ export default {
   position: relative;
   width: 60vw;
   height: 35vh;
-  background: white;
+  background: black;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 }
@@ -264,13 +264,13 @@ export default {
   position: absolute;
   z-index: 10;
   bottom: 1rem;
-  right: 2rem;
+  right: 1rem;
   display: flex;
   align-items: center;
   background: white;
   border-radius: 8px;
   border: solid 1px grey;
-  width: 30%;
+  width: 35%;
   cursor: pointer;
 }
 .user-bg_edit {
@@ -326,14 +326,14 @@ export default {
 .edit-picture_btn {
   position: absolute;
   z-index: 10;
-  bottom: 0;
-  right: -50px;
+  bottom: 3rem;
+  left: -2.5rem;
   display: flex;
   align-items: center;
   background: white;
   border-radius: 8px;
   border: solid 1px grey;
-  width: 35%;
+  width: 40%;
   cursor: pointer;
 }
 .profile-data {

@@ -175,6 +175,7 @@ module.exports = {
     const token = req.headers.authorization.split(' ')[1]
     const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
     const userId = userFound.id
+    
 
     // Params
     var bio       = req.body.bio;
@@ -208,6 +209,21 @@ module.exports = {
           res.status(404).json({ 'error': 'user not found' });
         }
       },
+      function (done){
+        models.User.update(updatedProfile, { where: { id: userId } })
+      .then((result) => {
+        res.status(200).json({
+          message: "Overlay updated successfully",
+          post: updatedProfile,
+        });
+      })
+      .catch((error) => {
+        res.status(200).json({
+          message: "Something went wrong",
+          error: result,
+        });
+      });
+    }
     ], function(userFound) {
       if (userFound) {
         return res.status(201).json(userFound);
