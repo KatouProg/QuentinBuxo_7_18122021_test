@@ -1,4 +1,6 @@
 const models = require('../models');
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
 
 module.exports = {
@@ -100,13 +102,16 @@ module.exports = {
             }).catch(error => {
                 res.status(200).json({
                     message: "Something went wrong",
-                    error : erro
+                    error : error
                 });
             })
     },
     likes: async function (req, res) {
-        const userId = req.body.userId
-        const publicationId = req.params.id
+        const token = req.headers.authorization.split(' ')[1]
+        const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
+        const userId = userFound.id
+        const publicationId = req.params.publicationId
+
         const likeHere = await models.Likes.findOne({where: {userId: userId, publicationId: publicationId}})
         if (likeHere) {
                await likeHere.destroy ()
@@ -115,16 +120,18 @@ module.exports = {
             }else {
                 await models.Likes.create({publicationId: publicationId, userId: userId })
                 .then(() => res.status(200).json({message: 'like create'}))
-                .catch(error => res.status(400).json({error}))
+                .catch(error => res.status(400).json({error}, "yoooooooo"))
                  }
     },
     getAllLikes: function(req, res){
         const allLikes = models.Likes.findAndCountAll({
-            where: {publicationid: req.params.publicationId},
+            where: {publicationId: req.params.publicationId},
             includes: models.User
         })
-        res.status(200).json({allLikes})
-        res.status(400).json({error})
+        if(allLikes) {
+            return res.status(200).json({allLikes})
+        } else {
+            return res.status(400).json("error couzin !!!")
+        }
     }
-
 }

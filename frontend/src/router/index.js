@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router'
 
 
 const routes = [
@@ -26,15 +26,13 @@ const routes = [
   {
     path: '/Profile/:userId',
     name: 'UserProfile',
-    component: () => import('../views/UserProfile.vue'),
-    props: true
+    component: () => import('../views/UserProfile.vue')
   }
 ]
 
-
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(process.env.BASE_URL),
+  routes
 })
 
-export default router;
+export default router

@@ -44,13 +44,13 @@
               @click="deletePublication(publication.id, publication.userId)"
               class="delete-btn"
             >
-              Supprimer le post
+              Supprimer la publication
             </button>
             <button
               @click="displayModificationModal(publication), (editModal = true)"
               class="edit-btn"
             >
-              Modifier le post
+              Modififer la publication
             </button>
           </div>
         </div>
@@ -342,7 +342,7 @@ export default {
           publicationId: id,
           like: 1,
         })
-        .then((response) => console.log(response));
+        //.then((response) => console.log(response));
     },
     getLikes(id) {
       this.$store.dispatch("getLikesList", {

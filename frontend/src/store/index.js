@@ -228,9 +228,10 @@ const store = createStore({
         })
         .catch(error => {
           console.log({ error: error });
-          console.log("==== publication impossible - store 229 ====");
+          //console.log("==== publication impossible - store 229 ====");
         })
     },
+
     UpdatePublication({ commit }, data) {
       instance.put(`publications/${data[1]}`, data[0],
       {'Content-Type' : 'application/form-data'})

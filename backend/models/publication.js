@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Publication.init({
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+     },
     userId: DataTypes.INTEGER,
     content: DataTypes.TEXT,
     imageUrl: DataTypes.STRING,
