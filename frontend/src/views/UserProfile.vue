@@ -80,7 +80,8 @@ export default {
           userId: user.id,
           isAdmin: user.isAdmin,
         })
-        .then(function () {
+        .then(
+          function () {
           this.$router.push("/Home");
           return;
         }),

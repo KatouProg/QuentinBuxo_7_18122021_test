@@ -17,7 +17,7 @@ module.exports = {
         }
       },
       content: {
-        allowNull: false,
+        allowNull: true,   // besoin de default value ?
         type: Sequelize.TEXT
       },
       imageUrl: {
