@@ -14,7 +14,7 @@ router.get('/:id',auth, publicationsCtrl.getOnePublication);
 router.put('/:id',auth, multer.uploadImage, publicationsCtrl.updatePublication);
 router.delete('/:id',auth, publicationsCtrl.deletePublication);
 router.post('/:publicationId/like',auth, publicationsCtrl.likes)
-router.get('/:id/likes', auth, publicationsCtrl.getAllLikes)
+router.get('/:publicationId/likes', auth, publicationsCtrl.getAllLikes)
 
 router.post('/:publicationId/comments', auth, commentsCtrl.createComment);
 router.get('/:publicationId/comments',auth, commentsCtrl.getAllComments);

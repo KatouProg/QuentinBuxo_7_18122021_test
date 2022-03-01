@@ -203,6 +203,7 @@ input {
   text-indent: 10px;
 }
 .logbtn {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -216,8 +217,10 @@ input {
   color: white;
   font-weight: bold;
 }
+
 .signup-btn,
 .signup-front-btn {
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -232,6 +235,7 @@ input {
   text-align: center;
   border-style: none;
 }
+
 .closemodalbtn {
   position: absolute;
   top: 1rem;

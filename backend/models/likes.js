@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Likes.afterCreate(async like => {
-    const publication = await like.getPost()
+    const publication = await like.getPublication()
     const user = await like.getUser()
 
     if(user.id == publication.userId) return

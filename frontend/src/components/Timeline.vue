@@ -334,22 +334,23 @@ export default {
         currentPublication.id,
       ]);
     },
-    addLike(id) {
+    addLike(publicationId) {
       const user = this.userInfos;
       this.$store
         .dispatch("addLikes", {
           userId: user.id,
-          publicationId: id,
+          publicationId: publicationId,
           like: 1,
         })
         //.then((response) => console.log(response));
     },
-    getLikes(id) {
+    getLikes(publicationId) {
       this.$store.dispatch("getLikesList", {
-        publicationId: id,
+        publicationId: publicationId,
       });
     },
     addComment(id) {
+      console.log(this.content);
       this.$store
         .dispatch("addComment", {
           id: id,
@@ -661,12 +662,29 @@ a {
 .count-number {
   margin: 0 5px;
 }
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 970px) {
   .timeline-container {
     width: 100vw;
   }
   .publication-card {
-    width: 100vw;
+    width: 90vw;
+    border-radius: 10px;
+    margin-right: 5px;
+  }
+  .profile-publication {
+    display: block;
+  }
+  .interactions-count {
+    border-bottom: none;
+    padding-bottom: 10px;
+  }
+  .post-comment_container {
+    font-size: 0.8rem;
+    width: 35vw;
+    height: 10%;
+  }
+  .comment-send {
+    margin-left: 15px ;
   }
 }
 </style>

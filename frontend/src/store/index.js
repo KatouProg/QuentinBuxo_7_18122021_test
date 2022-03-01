@@ -55,11 +55,8 @@ const store = createStore({
       state.userInfos = newInfos;
     },
     LOG_OUT: function (state) {
-      state.user = {
-        userId: -1,
-        token: '',
-      }
       localStorage.removeItem('user');
+      state.user = null;
     },
     PUBLICATIONS_LIST: function (state, publications) {
       state.publications = publications;
@@ -101,7 +98,7 @@ const store = createStore({
       }
     }
     },
-    ADD_LIKES: function(state, newlike){
+    ADD_LIKES: function(state, newlike) {
       state.likes.push(newlike)
     },
     GET_LIKES: function(state, likeList){
@@ -198,11 +195,10 @@ const store = createStore({
         });
       },
     deleteAccount({ commit }, account) {
-      let logOff = account.id == account.userId;
-      instance.delete(`users/${account.id}`, { data : account})
+      instance.delete(`users/${account.id}`)
         .then((response) => {
           console.log(response)
-          if (logOff) commit('LOG_OUT', account)
+          commit('LOG_OUT', account)
           window.location.reload();
         })
         .catch(error => {
@@ -264,12 +260,12 @@ const store = createStore({
           console.log({ error: error })
         })
     },
-    addComment({ commit }, publication, comment) {
-      instance.post(`publications/${publication.id}/comments`,comment,
-      {'Content-Type' : 'application/form-data'})
+    addComment({ commit }, comment) {
+      console.log(comment, "toto");
+      instance.post(`publications/${comment.id}/comments`, comment)
         .then(function (response) {
           console.log(response)
-          commit('ADD_COMMENT', comment)
+          commit('ADD_COMMENT', response.data)
           window.location.reload();
         })
         .catch(error => {
@@ -298,22 +294,21 @@ const store = createStore({
           console.log({ error: error })
         })
     },
-    addLikes({commit}, like){
-      instance.post(`publications/${like.publicationId}/like`,like,
+    addLikes({ commit }, like) {
+      instance.post(`publications/${like.publicationId}/like`, like,
       {'Content-Type' : 'application/form-data'})
       .then((response) => {
-        console.log(response.data)
-        commit('ADD_LIKES', like)
+        commit('ADD_LIKES', response.data)
       })
       .catch(error => {
-        console.log({ error: error })
+        console.log({ error: error}, "cannot add like !" )
       })
     },
-    getLikesList({commit}, publication){
-      instance.get(`publications/${publication.id}/likes`)
+    getLikesList({commit}, likes){
+      instance.get(`publications/${likes.publicationId}/likes`)
       .then((response)=>{
       console.log(response)
-      commit('GET_LIKES', response)
+      commit('GET_LIKES', likes)
       })
     }
   }

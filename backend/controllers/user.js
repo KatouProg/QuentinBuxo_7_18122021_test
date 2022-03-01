@@ -52,14 +52,14 @@ module.exports = {
       function(result, done) {
         if (!result) {
           bcrypt.hash(password, 15, function( err, bcryptedPassword ) {
-            done(null, result, bcryptedPassword);
+            done(null, bcryptedPassword);
           });
         } else {
           return res.status(409).json({ 'error': 'user already exist' });
         }
       },
-      function(result, bcryptedPassword, done) {
-        var newUser = models.User.create({
+      function(bcryptedPassword, done) {
+        models.User.create({
           email: req.body.email,
           firstname: req.body.firstname,
           lastname: req.body.lastname,
@@ -67,14 +67,14 @@ module.exports = {
           imageUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null,
           bgUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null,
           password: bcryptedPassword,
-          isAdmin: 0
+          isAdmin: req.body.isAdmin,
         })
         .then(function(newUser) {
           done(newUser);
         })
         .catch(function(err) {
           console.log(err);
-          return res.status(500).json({ 'error': 'cannot add user' });
+          return res.status(500).json({ 'error': '*** cannot add user ***' });
         });
       }
     ], function(newUser) {
@@ -149,9 +149,7 @@ module.exports = {
       });
   },
   getUserProfile: function(req, res) {
-    const token = req.headers.authorization.split(' ')[1]
-    const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
-    const userId = userFound.id
+    const userId = req.params.id;
 
     if (userId < 0)
       return res.status(400).json({ 'error': 'wrong token' });
@@ -269,7 +267,8 @@ module.exports = {
       // Read
       const token = req.headers.authorization.split(' ')[1]
       const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
-      const userId = userFound.id
+      const userId = userFound.id;
+      
 
       const idToDelete = req.params.id;
       if (!userId || !idToDelete) {

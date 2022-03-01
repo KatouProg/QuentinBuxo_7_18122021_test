@@ -29,7 +29,7 @@ module.exports = {
         const id = req.params.id;
         models.Publication.findOne({
             include:{
-            where:{id: id},
+            where:{id: publicationId},
             model:models.User
         } 
         }).then(result => {
@@ -107,13 +107,12 @@ module.exports = {
             })
     },
     likes: async function (req, res) {
-        const token = req.headers.authorization.split(' ')[1]
-        const userFound = jwt.verify(token, process.env.SECRET_TOKEN);
-        const userId = userFound.id
+        const userId = req.body.userId;
         const publicationId = req.params.publicationId
 
         const likeHere = await models.Likes.findOne({where: {userId: userId, publicationId: publicationId}})
         if (likeHere) {
+            console.log(likeHere);
                await likeHere.destroy ()
                   .then(() => res.status(200).json({message: 'like destroy'}))
                   .catch(error => res.status(400).json({error}))

@@ -3,7 +3,8 @@ const models = require ('../models');
 module.exports = {
 
     createComment : function(req, res){
-    const comment = {
+    console.log("yoooooooooo!!!!", req);
+        const comment = {
         userId: req.body.userId,
         publicationId: req.params.publicationId,
         content: req.body.content,

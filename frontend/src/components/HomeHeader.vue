@@ -208,9 +208,10 @@ input {
 .postlink-container {
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 73%;
   height: 40px;
   padding-left: 1rem;
+  margin-left: 4px;;
   border-radius: 1rem;
   background: #d3d3d3;
 }
@@ -218,14 +219,22 @@ input {
   .mobil-logo {
     display: block;
     width: 10vw;
-    margin-right: 3rem;
   }
   .logo {
     display: none;
   }
   .sign-out_icon {
     width: 7vw;
-    margin-right: 1.5rem;
+  }
+  .user-name {
+    display: none;
+  }
+  .user_profile-picture {
+    max-width: 50%;
+  }
+  .user_pict-link {
+    font-size: 0.8em;
+    padding-right: 7px;
   }
 }
 </style>
