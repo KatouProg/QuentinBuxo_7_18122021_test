@@ -6,6 +6,7 @@
         :key="publication.id"
         class="publication-card"
       >
+      <!-- {{ publication }} -->
         <div class="profile-publication">
           <router-link
             class="user-name"
@@ -323,8 +324,9 @@ export default {
     },
     editPublication(currentPublication) {
       const formData = new FormData();
+      const user = this.userInfos;
       formData.append("id", currentPublication.id);
-      formData.append("userId", currentPublication.userId);
+      formData.append("userId", user.id);
       formData.append("content", currentPublication.content);
       formData.append("image", this.files);
       console.log(this.files);
