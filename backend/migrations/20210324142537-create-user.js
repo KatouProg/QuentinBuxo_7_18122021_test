@@ -45,7 +45,7 @@ module.exports = {
         type: Sequelize.DATE
       },
       isAdmin: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.BOOLEAN,
         default: "0"
       },

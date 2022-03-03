@@ -31,7 +31,7 @@
             </div>
           </div>
           <button
-            v-if="userInfos.isAdmin || userProfile.id == userInfos.id"
+            v-if="userInfos.isAdmin || userProfile.id == userInfos.id" 
             @click="deleteAccount()"
             class="deleteBtn"
           >
@@ -74,6 +74,7 @@ export default {
   methods: {
     deleteAccount() {
       const user = this.userInfos;
+      console.log(user);
       this.$store
         .dispatch("deleteAccount", {
           id: this.userProfile.id,
@@ -82,7 +83,7 @@ export default {
         })
         .then(
           function () {
-          this.$router.push("/Home");
+          this.$router.push({ path : '/Home'});
           return;
         }),
         function (error) {

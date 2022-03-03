@@ -98,8 +98,8 @@ export default {
     };
   },
   mounted: function () {
-    if (this.$store.state.user.userId != -1) {
-      this.$router.push("/Profile");
+    if (this.$store.state.userInfos.userId != -1) { // (this.$store.state.user.userId != -1)
+      this.$router.push({ path: '/' });
       return;
     }
   },
@@ -107,16 +107,16 @@ export default {
     ...mapState(["status"]),
   },
   methods: {
+    
     login: function () {
-      const self = this;
       this.$store
         .dispatch("login", {
           email: this.email,
           password: this.password,
         })
         .then(
-          function () {
-            self.$router.push("/Home");
+          () => {
+            this.$router.push({ path: '/Home' });
           },
           function (error) {
             console.log(error);
@@ -124,7 +124,6 @@ export default {
         );
     },
     createAccount: function () {
-      const self = this;
       this.$store
         .dispatch("createAccount", {
           email: this.email,
@@ -133,8 +132,8 @@ export default {
           password: this.password,
         })
         .then(
-          function () {
-            self.login();
+          () => {
+            this.login();
           },
           function (error) {
             console.log(error);

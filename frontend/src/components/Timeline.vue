@@ -11,7 +11,7 @@
             class="user-name"
             :to="{
               name: 'UserProfile',
-              params: { userId: publication.User.id },
+              params: { userId: publication.userId },
             }"
           >
             <img
@@ -24,7 +24,7 @@
             class="user-name"
             :to="{
               name: 'UserProfile',
-              params: { userId: publication.User.id },
+              params: { userId: publication.userId },
             }"
           >
             <span
@@ -50,7 +50,7 @@
               @click="displayModificationModal(publication), (editModal = true)"
               class="edit-btn"
             >
-              Modififer la publication
+              Modifier la publication
             </button>
           </div>
         </div>

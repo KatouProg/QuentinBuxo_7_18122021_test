@@ -155,7 +155,7 @@ module.exports = {
       return res.status(400).json({ 'error': 'wrong token' });
 
     models.User.findOne({
-      attributes: [ 'id', 'email', 'firstname', 'lastname', 'bio', 'imageUrl', 'bgUrl' ],
+      attributes: [ 'id', 'email', 'firstname', 'lastname', 'bio', 'imageUrl', 'bgUrl', 'isAdmin' ],
       where: { id: userId }
     })
     .then((userFound) => {
@@ -277,19 +277,25 @@ module.exports = {
       }
 
       // Is authorized
-      let allowed = req.body.isAdmin;
-      if (userId == idToDelete) allowed = true;
-      if (!allowed) {
+      const currentUser = 
+        await models.User.findOne({
+          attributes:['id','isAdmin'],
+          where: { id : userFound.id }
+        })
+        
+      if (currentUser.isAdmin == false) {
+        console.log(currentUser);
         res.status(401).json({ message: "not allowed" });
         return;
       }
-
+      
       // Destroy
       let user = await models.User.findOne({ where: { id: idToDelete } });
       user.destroy();
       res.status(200).json({ message: "compte supprimé", hooks: true });
     } catch (error) {
       res.status(400).json({ error });
+      console.log("Ca marche pooo !!!", error);
     }
   },
 };

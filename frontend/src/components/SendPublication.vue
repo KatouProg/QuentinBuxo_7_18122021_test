@@ -114,7 +114,7 @@ export default {
     },
     addPublication() {
       const formData = new FormData();
-      formData.append("id", JSON.stringify(this.userInfos.id));
+      formData.append("id", this.userInfos.id);
       formData.append("content", this.content);
       formData.append("image", this.files);
       this.$store.dispatch("addPublication", formData);

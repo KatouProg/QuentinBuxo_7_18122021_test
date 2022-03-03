@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     const publication = await like.getPublication()
     const user = await like.getUser()
 
-    if(user.id == publication.userId) return
+    if(user.id == publication.userId) return 
 
   })
 

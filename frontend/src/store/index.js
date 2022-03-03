@@ -99,7 +99,8 @@ const store = createStore({
     }
     },
     ADD_LIKES: function(state, newlike) {
-      state.likes.push(newlike)
+      console.log(newlike);
+      state.likes.push(newlike);
     },
     GET_LIKES: function(state, likeList){
     state.likes = likeList;
@@ -197,7 +198,7 @@ const store = createStore({
     deleteAccount({ commit }, account) {
       instance.delete(`users/${account.id}`)
         .then((response) => {
-          console.log(response)
+          console.log(response, account)
           commit('LOG_OUT', account)
           window.location.reload();
         })
@@ -261,7 +262,7 @@ const store = createStore({
         })
     },
     addComment({ commit }, comment) {
-      console.log(comment, "toto");
+      console.log(comment);
       instance.post(`publications/${comment.id}/comments`, comment)
         .then(function (response) {
           console.log(response)
@@ -298,6 +299,7 @@ const store = createStore({
       instance.post(`publications/${like.publicationId}/like`, like,
       {'Content-Type' : 'application/form-data'})
       .then((response) => {
+        console.log(like)
         commit('ADD_LIKES', response.data)
       })
       .catch(error => {
