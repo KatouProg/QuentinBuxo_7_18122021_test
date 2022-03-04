@@ -66,7 +66,12 @@
         <div class="interactions-count">
           <div class="likes-count">
             <img
-              v-if="liked"
+              @click="
+                addLike(publication.id),
+                  getLikes(publication.id),
+                  (liked = true)
+              "
+              v-if="isLiked(publication.Likes, userInfos.id)"
               class="liked"
               src="../assets/like.png"
               aria-labelly="button"
@@ -78,7 +83,7 @@
                   getLikes(publication.id),
                   (liked = true)
               "
-              v-if="(likes.length = 0 || liked == false)"
+              v-if="!isLiked(publication.Likes, userInfos.id)"
               class="like"
               src="../assets/likew.png"
               aria-labelly="button"
@@ -344,12 +349,16 @@ export default {
           publicationId: publicationId,
           like: 1,
         })
-        //.then((response) => console.log(response));
+        .then((response) => console.log(response));
+        window.location.reload();
     },
     getLikes(publicationId) {
       this.$store.dispatch("getLikesList", {
         publicationId: publicationId,
       });
+    },
+    isLiked(likes, userId) {
+      return likes.filter(like => like.userId === userId).length > 0;
     },
     addComment(id) {
       console.log(this.content);

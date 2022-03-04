@@ -10,7 +10,7 @@ module.exports = {
             userId: req.body.id,
             content: req.body.content,
             imageUrl: req.file ? `${req.protocol}://${req.get('host')}/images/${req.file.filename}` : null,
-            likes:0
+            likes:req.body.likes
         }
         models.Publication.create(publication).then(result => {
             res.status(201).json({
@@ -46,13 +46,20 @@ module.exports = {
            order:[[
                 'createdAt', 'DESC'
            ]],
-            include:{
-                model:models.User,
-            }}).then(result => {
-            res.status(200).json(result);
-        }).catch(error => {
-            res.status(500).json({
-                message: 'Something went wrong'
+           include: { all: true },
+            /*include:[
+                {
+                    models: models.User
+                },
+                {
+                    models: models.Likes
+                }
+            ]*/
+        }).then(result => {
+                    res.status(200).json(result);
+             }).catch(error => {
+                    res.status(500).json({
+                        message: 'Something went wrong'
             });
         });
     },
@@ -113,13 +120,18 @@ module.exports = {
         const likeHere = await models.Likes.findOne({where: {userId: userId, publicationId: publicationId}})
         if (likeHere) {
             //console.log(likeHere);
-               await likeHere.destroy ()
+               likeHere.destroy()
                   .then(() => res.status(200).json({message: 'like destroy'}))
-                  .catch(error => res.status(400).json({error}))
+                  
+                  .catch(function (error) {
+                      console.log(error);
+                      res.status(400).json({error, "text" : error})   
+                  })
+                  //.catch(error => res.status(400).json({error, "text" : error} ))
             }else {
-                await models.Likes.create({publicationId: publicationId, userId: userId })
+                models.Likes.create({publicationId: publicationId, userId: userId })
                 .then(() => res.status(200).json({message: 'like create'}))
-                .catch(error => res.status(400).json({error}, "yoooooooo"))
+                .catch(error => res.status(400).json({error, "text": "yoooooooo"}))
                  }
     },
     getAllLikes: async function(req, res){

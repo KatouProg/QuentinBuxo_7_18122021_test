@@ -293,22 +293,7 @@ export default {
   color: #042a5f;
 }
 @media screen and (max-width: 767px) {
-
-  .edit-bg_btn {
-    position: absolute;
-    z-index: 10;
-    bottom: 1rem;
-    right: 2rem;
-    display: flex;
-    align-items: center;
-    background: rgb(216, 45, 45);
-    border-radius: 8px;
-    border: solid 1px grey;
-    width: 30%;
-    cursor: pointer;
-  }
-
-
+  
   .profile-pictures {
     width: 100%;
   }

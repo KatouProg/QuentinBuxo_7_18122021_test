@@ -98,7 +98,7 @@ export default {
     };
   },
   mounted: function () {
-    if (this.$store.state.userInfos.userId != -1) { // (this.$store.state.user.userId != -1)
+    if (this.$store.state.userInfos.userId != -1) {           // (this.$store.state.user.userId != -1)
       this.$router.push({ path: '/' });
       return;
     }
