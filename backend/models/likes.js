@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   Likes.afterCreate(async like => {
     const publication = await like.getPublication()
     await publication.update({
-      likesCount: publication.likes + 1
+      likes: publication.likes + 1
     })
   })
   Likes.afterDestroy(async like => {
