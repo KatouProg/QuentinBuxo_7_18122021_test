@@ -287,7 +287,6 @@ export default {
   bottom: -30px;
   width: 50vw;
   z-index: 99999;
-  background: red;
 }
 .user-picture_box {
   position: relative;
@@ -432,19 +431,35 @@ export default {
 }
 @media screen and (max-width: 1160px) {
   
-  .edit-bg_btn {
-  position: absolute;
-  z-index: 10;
-  bottom: 1rem;
-  right: 1rem;
-  display: flex;
-  align-items: center;
-  background: white;
-  border-radius: 8px;
-  border: solid 1px grey;
-  width: auto;
-  cursor: pointer;
+  .edit-picture_btn {
+    background: white;
+    color: #042a5f;
+    position: initial;
+    z-index: 10;
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    border: solid 1px grey;
+    width: 15vh;
+    cursor: pointer;
 }
+
+  .edit-bg_btn {
+    background: white;
+    color: #042a5f;
+    position: absolute;
+    margin-bottom: 250px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 8px;
+    border: solid 1px grey;
+    width: 15vh;
+    cursor: pointer;
+  }
 
   .profile-data {
     width: 100%;

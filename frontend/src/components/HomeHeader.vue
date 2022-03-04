@@ -81,7 +81,6 @@ a {
 }
 .logo {
   padding: 1rem;
-  margin-right: 7.5rem;
   background: #042a5f;
 }
 .mobil-logo {
@@ -156,7 +155,7 @@ input {
   border-radius: 25px;
   background: white;
   border: 1px solid white;
-  margin-left: 1.5rm;
+  margin-left: 1.5rem;
   display: flex;
   align-items: center;
 }
@@ -211,30 +210,46 @@ input {
   width: 73%;
   height: 40px;
   padding-left: 1rem;
-  margin-left: 4px;;
+  margin-left: 4px;
   border-radius: 1rem;
   background: #d3d3d3;
 }
 @media screen and (max-width: 767px) {
+
+  header {
+    height: auto;
+  }
+
   .mobil-logo {
     display: block;
-    width: 10vw;
+    width: 12vw;
   }
   .logo {
     display: none;
   }
   .sign-out_icon {
-    width: 7vw;
+    width: 11vw;
+    margin: 0 15px 0 0
   }
-  .user-name {
-    display: none;
-  }
-  .user_profile-picture {
-    max-width: 50%;
-  }
+ 
   .user_pict-link {
     font-size: 0.8em;
     padding-right: 7px;
   }
+  .user-profile_container {
+  width: auto;
+  height: 4vh;
+  margin: 0 0 0 15px;
+}
+  .user_profile-pict {
+  display: none;
+}
+  .user-name {  
+  padding-right: 7px;
+  } 
+  .user-side_profile {
+  padding: 0 0 0 0;
+}
+ 
 }
 </style>

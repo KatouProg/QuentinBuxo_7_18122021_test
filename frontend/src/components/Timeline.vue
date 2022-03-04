@@ -665,6 +665,8 @@ a {
   margin: 0 5px;
 }
 @media screen and (max-width: 970px) {
+
+  
   .timeline-container {
     width: 100vw;
   }
@@ -674,7 +676,7 @@ a {
     margin-right: 5px;
   }
   .profile-publication {
-    display: block;
+    height: 80px;
   }
   .interactions-count {
     border-bottom: none;

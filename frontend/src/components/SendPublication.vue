@@ -129,6 +129,7 @@ export default {
   width: 100vw;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 .text-content {
   width: 95%;
@@ -272,7 +273,7 @@ export default {
 @media screen and (max-width: 767px) {
   .SP-layout,
   .user_publication-container {
-    width: 100vw;
+    width: 90vw;
   }
   .publication-modal,
   .user-signup {
