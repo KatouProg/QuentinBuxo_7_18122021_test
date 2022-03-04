@@ -4,33 +4,48 @@
 
 ## Quentin BUXO
 
-****************************************************************************************************
+</br>
+</br>
+</br>
 
 # FRONTEND
 
 ## Project setup
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Run Project
+
 ```
 npm run serve
+
+```
+</br>
+</br>
+</br>
 
 # BACKEND
 
 ## Project setup
 ```
+
 npm install
+
 ```
 
-### Compiles and hot-reloads for development
+## Run server
 ```
+
 nodemon server
 
-****************************************************************************************************
+```
+</br>
+</br>
+</br>
 
 # ADMIN Account
 
-Mail     : admin@admin.com
+Mail : admin@admin.com</br>
 Password : Admin30
