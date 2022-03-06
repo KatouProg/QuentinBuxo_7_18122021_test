@@ -246,7 +246,6 @@ const store = createStore({
         .then((response) => {
           console.log(response)
           commit('DELETE_PUBLICATION', publication);
-          window.location.reload();
         })
         .catch(error => {
           console.log({ error: error })
@@ -289,7 +288,6 @@ const store = createStore({
         .then((response) => {
           console.log(response)
           commit('DELETE_COMMENT', comment)
-          window.location.reload();
         })
         .catch(error => {
           console.log({ error: error })
