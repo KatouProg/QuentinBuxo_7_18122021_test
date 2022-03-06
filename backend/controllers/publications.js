@@ -47,14 +47,6 @@ module.exports = {
                 'createdAt', 'DESC'
            ]],
            include: { all: true },
-            /*include:[
-                {
-                    models: models.User
-                },
-                {
-                    models: models.Likes
-                }
-            ]*/
         }).then(result => {
                     res.status(200).json(result);
              }).catch(error => {

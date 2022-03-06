@@ -301,7 +301,6 @@ const store = createStore({
       .then((response) => {
         console.log(like)
         commit('ADD_LIKES', response.data)
-        window.location.reload();
       })
       .catch(error => {
         console.log({ error: error}, "cannot add like !" )

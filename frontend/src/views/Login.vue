@@ -330,5 +330,8 @@ footer {
   .user-signup {
     width: 100vw;
   }
+  footer {
+    display: none;
+  }
 }
 </style>

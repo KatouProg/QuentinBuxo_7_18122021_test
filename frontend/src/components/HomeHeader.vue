@@ -223,6 +223,7 @@ input {
   .mobil-logo {
     display: block;
     width: 12vw;
+    padding-bottom: 15px;
   }
   .logo {
     display: none;
